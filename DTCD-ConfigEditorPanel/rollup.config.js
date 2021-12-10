@@ -1,8 +1,7 @@
-import vue from 'rollup-plugin-vue';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import styles from 'rollup-plugin-styles';
-import replace from '@rollup/plugin-replace';
+import { babel } from '@rollup/plugin-babel';
 
 const watch = Boolean(process.env.ROLLUP_WATCH);
 
@@ -16,22 +15,16 @@ const plugins = [
     jsnext: true,
     preferBuiltins: true,
     browser: true,
-    dedupe: ['vue'],
-    extensions: ['.mjs', '.js', '.json', '.node', '.vue'],
-  }),
-  commonjs(),
-  vue({
-    preprocessStyles: true,
-  }),
-  replace({
-    preventAssignment: true,
-    'process.env.NODE_ENV': JSON.stringify('production'),
-    'process.env.VUE_ENV': JSON.stringify('browser'),
   }),
   styles({
     mode: 'inject',
     modules: true,
   }),
+  babel({
+    babelHelpers: 'bundled',
+    plugins: ['@babel/plugin-proposal-class-properties', '@babel/plugin-proposal-private-methods'],
+  }),
+  commonjs(),
 ];
 
 export default {
