@@ -155,7 +155,8 @@ export class ConfigEditorPanel extends PanelPlugin {
       if (typeof propName !== 'undefined') {
         // "input" listener
         fieldElement.addEventListener('input', e => {
-          temp[propName] = e.target.value;
+          if (typeof e.target.value === 'undefined') temp[propName] = e.value;
+          else temp[propName] = e.target.value;
         });
 
         // Preset value to input

@@ -6,10 +6,14 @@ export default {
   text: 'base-input',
   number: 'base-input',
   input: 'base-input',
-  textarea: 'textarea',
+  textarea: 'base-textarea',
   divider: 'div',
   select: 'base-select',
   dataSource: 'base-select',
+  switch: 'base-switch',
+  colorpicker: 'base-color-picker',
+  button: 'base-button',
+  checkbox: 'base-checkbox',
 };
 
 // TODO: research - default значения для атрибутов относительно типа поля в форме
