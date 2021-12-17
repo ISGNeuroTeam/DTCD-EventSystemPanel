@@ -9,11 +9,12 @@ export default {
   textarea: 'base-textarea',
   divider: 'div',
   select: 'base-select',
-  dataSource: 'base-select',
+  datasource: 'datasource-select',
   switch: 'base-switch',
   colorpicker: 'base-color-picker',
   button: 'base-button',
   checkbox: 'base-checkbox',
+  'gauge-segments': 'gauge-segment-builder',
 };
 
 // TODO: research - default значения для атрибутов относительно типа поля в форме

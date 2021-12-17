@@ -75,11 +75,13 @@ export class ConfigEditorPanel extends PanelPlugin {
   }
 
   #renderPanelFooter() {
-    const acceptBtn = document.createElement('button');
+    const acceptBtn = document.createElement('base-button');
     acceptBtn.textContent = 'Сохранить';
     acceptBtn.addEventListener('click', () => {
       this.#focusedPluginInstance.setFormSettings(this.#temp);
     });
+    acceptBtn.style.padding = '10px';
+    acceptBtn.style.maxWidth = '150px';
     this.#rootElement.appendChild(acceptBtn);
   }
 
@@ -139,7 +141,8 @@ export class ConfigEditorPanel extends PanelPlugin {
 
       // Custom processing of components
       if (component === 'select') {
-        if (field.options) {
+        if (typeof field.options === 'function') field.options = field.options(this.#temp);
+        if (Array.isArray(field.options)) {
           for (let { label, value } of field.options) {
             const optionElement = document.createElement('div');
             optionElement.innerHTML = typeof label !== 'undefined' ? label : value;
@@ -160,18 +163,19 @@ export class ConfigEditorPanel extends PanelPlugin {
         });
 
         // Preset value to input
-        if (typeof propValue !== 'undefined') fieldElement.setAttribute('value', propValue);
-        if (typeof temp[propName] !== 'undefined')
-          fieldElement.setAttribute('value', temp[propName]);
+        if (typeof propValue !== 'undefined') fieldElement.value = propValue;
+        if (typeof temp[propName] !== 'undefined') fieldElement.value = temp[propName];
 
         // Set validation method to field
         if (typeof validation !== 'undefined')
-          fieldElement.validation = validation.bind(this, this.#temp);
+          fieldElement.validation = validation.bind(this, this.#temp, propName);
       } else {
         fieldElement.textContent = propValue;
       }
 
       el.appendChild(fieldElement);
+
+      fieldElement.dispatchEvent(new Event('input'));
     }
   }
 }
