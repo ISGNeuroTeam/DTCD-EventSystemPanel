@@ -100,7 +100,7 @@ export class ConfigEditorPanel extends PanelPlugin {
 
   render(config) {
     this.#renderPanelHeader();
-    const { fields } = config;
+    const { fields = [] } = config;
     this.fieldsProcessing(this.#temp, this.#rootElement, fields);
     this.#renderPanelFooter();
   }
