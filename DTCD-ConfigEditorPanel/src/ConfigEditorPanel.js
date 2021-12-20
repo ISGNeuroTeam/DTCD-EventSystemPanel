@@ -11,8 +11,6 @@ import fieldsMap from './fields-map';
 export class ConfigEditorPanel extends PanelPlugin {
   #guid;
   #eventSystem;
-  #workspaceSystem;
-  #dataSourceSystem;
   #styleSystem;
 
   #rootElement;
@@ -35,8 +33,6 @@ export class ConfigEditorPanel extends PanelPlugin {
     this.#eventSystem = new EventSystemAdapter(guid);
     this.#eventSystem.registerPluginInstance(this);
     this.#styleSystem = new StyleSystemAdapter();
-    this.#workspaceSystem = new WorkspaceSystemAdapter();
-    this.#dataSourceSystem = new DataSourceSystemAdapter();
 
     this.#guid = guid;
 
