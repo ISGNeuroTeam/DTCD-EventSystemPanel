@@ -9,8 +9,8 @@ Addition sections:
 	sdk - download SDK directory to the root
 endef
 
-PROJECT_NAME = DTCD-ConfigEditorPanel
-PLUGIN_NAME = ConfigEditorPanel
+PROJECT_NAME = DTCD-EventSystemPanel
+PLUGIN_NAME = EventSystemPanel
 
 GENERATE_VERSION = $(shell jq .version ./${PROJECT_NAME}/package.json )
 GENERATE_BRANCH = $(shell git name-rev $$(git rev-parse HEAD) | cut -d\  -f2 | sed -re 's/^(remotes\/)?origin\///' | tr '/' '_')
