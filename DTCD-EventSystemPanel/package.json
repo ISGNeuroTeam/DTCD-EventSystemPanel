@@ -1,5 +1,5 @@
 {
-  "name": "dtcd-config-editor-panel",
+  "name": "dtcd-event-system-panel",
   "version": "0.1.0",
   "scripts": {
     "test": "jest",
@@ -23,6 +23,8 @@
     "jest": "26.6.3",
     "rollup": "2.44.0",
     "rollup-plugin-styles": "3.14.1",
-    "sass": "1.32.8"
+    "rollup-plugin-vue": "^5.0.0",
+    "sass": "1.32.8",
+    "vue": "^2.6.14"
   }
 }
