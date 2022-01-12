@@ -8,6 +8,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0]
 
 ### Added
-- subscribe on "WorkspaceCellClicked" event
-- processing object returned by getFormSettings method of being configured plugin
-- mapping fields of form by registered base web components
+- main functional
