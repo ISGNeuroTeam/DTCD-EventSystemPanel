@@ -4,9 +4,11 @@
       <div class="event-info">
         <i>Cобытие:</i>
         {{
-          plugin.getInstance
-            .call(null, subscription.event.guid)
-            .constructor.getRegistrationMeta().name
+          subscription.event.guid
+            ? plugin.getInstance
+                .call(null, subscription.event.guid)
+                .constructor.getRegistrationMeta().name
+            : ""
         }}
         ({{ subscription.event.guid }})
         <b>{{ subscription.event.name }}</b>
@@ -14,9 +16,11 @@
       <div class="action-info">
         <i>Действие:</i>
         {{
-          plugin.getInstance
-            .call(null, subscription.action.guid)
-            .constructor.getRegistrationMeta().name
+          subscription.action.guid
+            ? plugin.getInstance
+                .call(null, subscription.action.guid)
+                .constructor.getRegistrationMeta().name
+            : ""
         }}
         ({{ subscription.action.guid }})
         <b>{{ subscription.action.name }}</b>
@@ -72,15 +76,15 @@ export default {
   justify-content: space-between;
 }
 
-.button-icon{
-	justify-self: baseline;
-	cursor: pointer;
-	padding: 10px;
-	border-radius: 16px;
+.button-icon {
+  justify-self: baseline;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 16px;
 }
 
-.button-icon:hover{
-	background-color: var(--background_secondary);
+.button-icon:hover {
+  background-color: var(--background_secondary);
 }
 
 .subscription-info {

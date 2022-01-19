@@ -1,5 +1,26 @@
 <template>
-  <div>
+  <div class="container">
+    <!-- to create CustomAction -->
+    <base-button @click="showCreateActionModal = !showCreateActionModal"
+      >Создать действие</base-button
+    >
+    <modal
+      v-show="showCreateActionModal"
+      @close="showCreateActionModal = !showCreateActionModal"
+      :type="'CreateAction'"
+    />
+
+    <!-- to remove CustomAction -->
+    <base-button @click="showRemoveActionModal = !showRemoveActionModal"
+      >Удалить действие</base-button
+    >
+    <modal
+      v-show="showRemoveActionModal"
+      @close="showRemoveActionModal = !showRemoveActionModal"
+      :type="'RemoveAction'"
+    />
+
+    <!-- Subscriptions -->
     <div
       class="subscription-container"
       v-for="(sub, index) in subscriptions"
@@ -7,15 +28,20 @@
     >
       <Subscription :subscription="sub" />
     </div>
+
+    <div style="margin-left: 10px">Добавить подписку:</div>
+
     <div class="new-subscription">
-      <base-select ref="eventSelect" required
+      <base-select ref="eventSelect" required class="event-select" search
         ><div slot="item" v-for="evt in events" :key="evt.id" :value="evt">
           <div class="plugin-info-container">
             <div class="plugin-name">
               {{
-                plugin.getInstance
-                  .call(null, evt.guid)
-                  .constructor.getRegistrationMeta().name
+                evt.guid
+                  ? plugin.getInstance
+                      .call(null, evt.guid)
+                      .constructor.getRegistrationMeta().name
+                  : ""
               }}
             </div>
             <div class="plugin-guid">
@@ -27,14 +53,16 @@
           </div>
         </div></base-select
       >
-      <base-select ref="actionSelect" required
+      <base-select ref="actionSelect" required search
         ><div slot="item" v-for="act in actions" :key="act.id" :value="act">
           <div class="plugin-info-container">
             <div class="plugin-name">
               {{
-                plugin.getInstance
-                  .call(null, act.guid)
-                  .constructor.getRegistrationMeta().name
+                act.guid
+                  ? plugin.getInstance
+                      .call(null, act.guid)
+                      .constructor.getRegistrationMeta().name
+                  : ""
               }}
             </div>
             <div class="plugin-guid">
@@ -61,11 +89,13 @@
 
 <script>
 import Subscription from "./Subscription.vue";
+import Modal from "./Modal.vue";
 
 export default {
   name: "EventSystemPanel",
   components: {
     Subscription,
+    Modal,
   },
   data() {
     return {
@@ -74,6 +104,8 @@ export default {
       subscriptions: [],
       events: [],
       actions: [],
+      showCreateActionModal: false,
+      showRemoveActionModal: false,
     };
   },
   mounted() {
@@ -101,7 +133,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.container {
+  padding: 10px;
+}
+
 .subscription-container {
   margin: 10px;
 }
@@ -113,6 +149,10 @@ export default {
 }
 .new-subscription > * {
   margin-left: 10px;
+}
+
+.event-select {
+  max-height: 250px;
 }
 
 [slot="item"] {

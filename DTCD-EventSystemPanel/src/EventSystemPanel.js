@@ -18,7 +18,7 @@ export class EventSystemPanel extends PanelPlugin {
       name: 'EventSystemPanel',
       title: 'Панель системы событий и действий',
       version: '0.1.0',
-      withDependencies:true
+      withDependencies: true
     };
   }
 
