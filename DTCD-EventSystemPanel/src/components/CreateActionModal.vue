@@ -47,7 +47,10 @@
 
     <div class="footer">
       <base-button @click="saveCustomAction">Сохранить</base-button>
-      <base-button @click="temp = {} || $emit('close')">Отменить</base-button>
+      <base-button
+        @click="temp = { name: '', parameters: [], body: '' } && $emit('close')"
+        >Отменить</base-button
+      >
     </div>
   </div>
 </template>
