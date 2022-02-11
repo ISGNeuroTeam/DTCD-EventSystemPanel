@@ -5,6 +5,7 @@ import {
 } from '../../DTCD-SDK/index';
 
 import Panel from "./components/Panel.vue"
+import { version } from './../package.json';
 
 export class EventSystemPanel extends PanelPlugin {
   #guid;
@@ -14,10 +15,10 @@ export class EventSystemPanel extends PanelPlugin {
 
   static getRegistrationMeta() {
     return {
+      version,
       type: 'panel',
       name: 'EventSystemPanel',
       title: 'Панель системы событий и действий',
-      version: '0.1.0',
       withDependencies: true
     };
   }
@@ -25,9 +26,9 @@ export class EventSystemPanel extends PanelPlugin {
   constructor(guid, selector) {
     super();
     this.#guid = guid
-    this.#eventSystem = new EventSystemAdapter(guid);
+    this.#eventSystem = new EventSystemAdapter('0.3.0', guid);
     this.#eventSystem.registerPluginInstance(this);
-    this.#styleSystem = new StyleSystemAdapter();
+    this.#styleSystem = new StyleSystemAdapter('0.3.1');
 
     this.#styleSystem.setVariablesToElement(document.querySelector(selector).parentElement, this.#styleSystem.getCurrentTheme());
 

@@ -78,7 +78,7 @@ export default {
       const { name, parameters, body } = this.temp;
 
       this.$root.pluginInstance
-        .getSystem("EventSystem")
+        .getSystem("EventSystem", "0.3.0")
         .registerAction("", name, new Function(...parameters, body));
       this.temp = {};
       this.$emit("close");
