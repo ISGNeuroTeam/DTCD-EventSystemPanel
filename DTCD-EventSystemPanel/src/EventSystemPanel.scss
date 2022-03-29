@@ -1,0 +1,161 @@
+.EventSystemPanel {
+  font-family: 'Proxima Nova';
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.21;
+  color: var(--text_main);
+  height: 100%;
+
+  &,
+  *,
+  *::after,
+  *::before {
+    box-sizing: border-box;
+  }
+
+  .Wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .Header,
+  .Body,
+  .Footer {
+    padding: 10px;
+  }
+
+  .Header {
+    flex: 0 0 auto;
+    min-height: 50px;
+    border-bottom: 4px solid var(--background_secondary);
+  }
+
+  .Body {
+    flex: 1 0 auto;
+  }
+
+  .TabTopBtnWrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+    margin-bottom: 22px;
+  }
+
+  .Subtitle {
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 22px;
+  }
+
+  .BtnBackWrapper,
+  .FieldContainer {
+    padding-bottom: 10px;
+  }
+
+  .FieldContainer {
+    &.type_params {
+      display: flex;
+      align-items: flex-end;
+      column-gap: 20px;
+
+      base-input {
+        width: 100%;
+      }
+    }
+  }
+
+  .ActionParamsAddBtn {
+    flex: none;
+    padding: 0;
+    background: none;
+    border: none;
+    width: 34px;
+    height: 34px;
+    cursor: pointer;
+
+    .Icon {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .ActionParams {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 10px;
+    
+    .ParamsWrapper {
+      padding-bottom: 10px;
+    }
+  }
+
+  .EditBtn {
+    display: inline-flex;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex: none;
+  }
+
+  .ExpanderSummaryContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 8px;
+  }
+
+  .Footer {
+    flex: 0 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 6px;
+    margin: 0 -3px;
+    border-top: 4px solid var(--background_secondary);
+
+    .BtnWrapper {
+      min-width: 33.33333333%;
+      flex: 1 1 auto;
+      padding: 0 3px;
+    }
+  }
+}
+
+
+
+.subscription-container {
+  margin: 10px;
+}
+
+.new-subscription {
+  display: flex;
+  justify-content: space-around;
+  height: 25px;
+}
+.new-subscription > * {
+  margin-left: 10px;
+}
+
+.event-select {
+  max-height: 250px;
+}
+
+[slot="item"] {
+  height: 100%;
+}
+
+.add-subscription-button {
+  justify-self: baseline;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 16px;
+  width: 60px;
+  height: 100%;
+}
+
+.add-subscription-button:hover {
+  background-color: var(--background_secondary);
+}

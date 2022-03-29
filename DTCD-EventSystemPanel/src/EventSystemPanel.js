@@ -4,8 +4,9 @@ import {
   StyleSystemAdapter
 } from '../../DTCD-SDK/index';
 
-import Panel from "./components/Panel.vue"
 import { version } from './../package.json';
+
+import Panel from './components/Panel.vue';
 
 export class EventSystemPanel extends PanelPlugin {
   #guid;
@@ -26,9 +27,9 @@ export class EventSystemPanel extends PanelPlugin {
   constructor(guid, selector) {
     super();
     this.#guid = guid
-    this.#eventSystem = new EventSystemAdapter('0.3.0', guid);
+    this.#eventSystem = new EventSystemAdapter('0.4.0', guid);
     this.#eventSystem.registerPluginInstance(this);
-    this.#styleSystem = new StyleSystemAdapter('0.3.1');
+    this.#styleSystem = new StyleSystemAdapter('0.4.0');
 
     this.#styleSystem.setVariablesToElement(document.querySelector(selector).parentElement, this.#styleSystem.getCurrentTheme());
 

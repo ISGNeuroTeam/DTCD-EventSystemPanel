@@ -79,7 +79,7 @@ export default {
 .button-icon {
   justify-self: baseline;
   cursor: pointer;
-  padding: 10px;
+  padding: 0;
   border-radius: 16px;
 }
 
