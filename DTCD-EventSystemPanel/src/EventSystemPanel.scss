@@ -127,39 +127,3 @@
     }
   }
 }
-
-
-
-.subscription-container {
-  margin: 10px;
-}
-
-.new-subscription {
-  display: flex;
-  justify-content: space-around;
-  height: 25px;
-}
-.new-subscription > * {
-  margin-left: 10px;
-}
-
-.event-select {
-  max-height: 250px;
-}
-
-[slot="item"] {
-  height: 100%;
-}
-
-.add-subscription-button {
-  justify-self: baseline;
-  cursor: pointer;
-  padding: 5px;
-  border-radius: 16px;
-  width: 60px;
-  height: 100%;
-}
-
-.add-subscription-button:hover {
-  background-color: var(--background_secondary);
-}
