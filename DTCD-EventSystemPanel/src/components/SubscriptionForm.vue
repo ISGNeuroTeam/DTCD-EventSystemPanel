@@ -154,10 +154,14 @@ export default {
     },
 
     deleteSubscription() {
+      if ( ! this.currentSubscription) {
+        return;
+      }
+
       const {
         event: { guid: eventGUID, name: eventName },
         action: { guid: actionGUID, name: actionName },
-      } = this.subscription;
+      } = this.currentSubscription;
 
       this.eventSystem.unsubscribe(
         eventGUID,

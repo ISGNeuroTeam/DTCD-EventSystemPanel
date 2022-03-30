@@ -4,7 +4,7 @@
   >
     <div
       class="Wrapper"
-      v-if="typeVisibleWindow === 'main'"
+      :style="{display: typeVisibleWindow === 'Main' ? '' : 'none'}"
     >
       <div class="Header">
         <base-heading theme="theme_subheaderSmall">
@@ -160,7 +160,7 @@ export default {
       subscriptions: [],
       events: [],
       actions: [],
-      typeVisibleWindow: 'main',
+      typeVisibleWindow: 'Main',
       chosenAction: null,
       chosenSubscription: null,
     };
@@ -178,9 +178,9 @@ export default {
           this.typeVisibleWindow = typeWindow;
           break;
 
-        case 'main':
+        case 'Main':
         default:
-          this.typeVisibleWindow = 'main';
+          this.typeVisibleWindow = 'Main';
           this.chosenAction = null;
           this.chosenSubscription = null;
           break;

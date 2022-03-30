@@ -2,7 +2,13 @@
   <div class="Wrapper">
     <div class="Header">
       <base-heading theme="theme_subheaderSmall">
-        <h4>Создание нового действия</h4>
+        <h4>
+          {{
+            currentSubscription
+              ? 'Редактировать действие'
+              : 'Создание нового действия'
+          }}
+        </h4>
       </base-heading>
     </div>
 
@@ -73,7 +79,7 @@
           size="big"
           theme="theme_red"
           @click="handleDeleteBtnClick"
-        >Удалить подписку</base-button>
+        >Удалить действие</base-button>
       </div>
       <div class="BtnWrapper">
         <base-button
