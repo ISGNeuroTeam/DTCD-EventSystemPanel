@@ -2,7 +2,13 @@
   <div class="Wrapper">
     <div class="Header">
       <base-heading theme="theme_subheaderSmall">
-        <h4>Изменение показателя</h4>
+        <h4>
+          {{
+            currentSubscription
+              ? 'Изменить подписку'
+              : 'Создать новую подписку'
+          }}
+        </h4>
       </base-heading>
     </div>
 
@@ -26,19 +32,20 @@
           size="big"
           required
           search
+          :value="currentSubscription ? currentSubscription.event : ''"
         >
           <div slot="item" v-for="evt in allEvents" :key="evt.id" :value="evt">
             <div class="plugin-info-container">
               <div>Название: {{ evt.name }}</div>
-              <div class="plugin-guid">GUID: {{ evt.guid }}</div>
-              <div class="plugin-name">
+              <div>GUID: {{ evt.guid }}</div>
+              <div>
                 Плагин: 
                 {{
                   evt.guid
                     ? plugin.getInstance
                         .call(null, evt.guid)
                         .constructor.getRegistrationMeta().name
-                    : ""
+                    : ''
                 }}
               </div>
             </div>
@@ -53,19 +60,20 @@
           size="big"
           required
           search
+          :value="currentSubscription ? currentSubscription.action : ''"
         >
           <div slot="item" v-for="act in allActions" :key="act.id" :value="act">
             <div class="plugin-info-container">
               <div>Название: {{ act.name }}</div>
-              <div class="plugin-guid">GUID: {{ act.guid }}</div>
-              <div class="plugin-name">
+              <div>GUID: {{ act.guid }}</div>
+              <div>
                 Плагин: 
                 {{
                   act.guid
                     ? plugin.getInstance
                         .call(null, act.guid)
                         .constructor.getRegistrationMeta().name
-                    : ""
+                    : ''
                 }}
               </div>
             </div>
@@ -75,7 +83,10 @@
     </div>
 
     <div class="Footer">
-      <div class="BtnWrapper">
+      <div
+        v-if="currentSubscription"
+        class="BtnWrapper"
+      >
         <base-button
           width="full"
           size="big"
@@ -114,6 +125,7 @@ export default {
     'allEvents',
     'allActions',
     'toggleWindow',
+    'currentSubscription',
   ],
   data() {
     return {
@@ -124,7 +136,7 @@ export default {
     };
   },
   methods: {
-    subscribe() {
+    createSubscription() {
       this.$refs.eventSelect.validate();
       const selectedEvent = this.eventSystem.events.find(
         (evt) => evt.id === this.$refs.eventSelect.value
@@ -159,7 +171,7 @@ export default {
 
     handleSubmitBtnClick(event) {
       event.preventDefault();
-      this.subscribe();
+      this.createSubscription();
       this.toggleWindow();
     }
   },

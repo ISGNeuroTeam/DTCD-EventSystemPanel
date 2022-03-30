@@ -2,7 +2,7 @@
   <div class="Wrapper">
     <div class="Header">
       <base-heading theme="theme_subheaderSmall">
-        <h4>Изменение показателя</h4>
+        <h4>Создание нового действия</h4>
       </base-heading>
     </div>
 
@@ -31,6 +31,7 @@
         <button
           type="button"
           class="ActionParamsAddBtn"
+          title="Добавить параметр функции"
           @click="addNewParameter"
         >
           <svg class="Icon" id="plus-circle" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -63,9 +64,11 @@
     </div>
 
     <div class="Footer">
-      <div class="BtnWrapper">
+      <div
+        v-if="currentAction"
+        class="BtnWrapper"
+      >
         <base-button
-          v-if="currentAction"
           width="full"
           size="big"
           theme="theme_red"
@@ -123,7 +126,7 @@ export default {
 
     handleDeleteBtnClick(event) {
       event.preventDefault();
-      this.eventSystem.registerCustomAction(temp.name);
+      this.eventSystem.removeCustomAction(this.temp.name);
       this.toggleWindow();
     },
 

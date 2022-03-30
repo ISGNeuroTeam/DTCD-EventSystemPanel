@@ -92,13 +92,17 @@
     }
   }
 
-  .EditBtn {
+  .ExpanderIconBtn {
     display: inline-flex;
     padding: 0;
     background: none;
     border: none;
     cursor: pointer;
     flex: none;
+
+    * {
+      fill: var(--button_primary);
+    }
   }
 
   .ExpanderSummaryContent {
