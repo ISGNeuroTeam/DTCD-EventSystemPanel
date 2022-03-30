@@ -34,7 +34,16 @@
                 :key="index"
               >
                 <div slot="summary" class="ExpanderSummaryContent">
-                  <div>Название: -</div>
+                  <div>
+                    <table class="Table theme_alfa">
+                      <tbody>
+                        <tr>
+                          <td class="Column type_first">Название:</td>
+                          <td class="Column type_second">-</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                   <button 
                     class="ExpanderIconBtn"
                     type="button"
@@ -48,21 +57,42 @@
                     </svg>
                   </button>
                 </div>
-                <div>
-                  Событие: {{sub.event.name}}
-                  (Плагин: 
-                  {{
-                    sub.event.guid
-                      ? plugin.getInstance
-                          .call(null, sub.event.guid)
-                          .constructor.getRegistrationMeta().name
-                      : ''
-                  }}
-                  ({{sub.event.guid}}))
-                </div>
-                <div>
-                  Действие: {{sub.action.name}} ({{sub.action.guid}})
-                </div>
+                <table class="Table theme_alfa">
+                  <tbody>
+                    <tr>
+                      <td class="Column type_first">Событие:</td>
+                      <td class="Column type_second">
+                        <div>{{sub.event.name}}</div>
+                        <div>
+                          {{
+                            sub.event.guid
+                              ? plugin.getInstance
+                                  .call(null, sub.event.guid)
+                                  .constructor.getRegistrationMeta().name
+                                + ` (${sub.event.guid})`
+                              : ''
+                          }}
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="Column type_first">Действие: </td>
+                      <td class="Column type_second">
+                        <div>{{sub.action.name}}</div>
+                        <div>
+                          {{
+                            sub.action.guid
+                              ? plugin.getInstance
+                                  .call(null, sub.action.guid)
+                                  .constructor.getRegistrationMeta().name
+                                + ` (${sub.action.guid})`
+                              : ''
+                          }}
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </base-expander>
             </base-expander-group>
           </div>
@@ -87,7 +117,16 @@
                 :key="act.id"
               >
                 <div slot="summary" class="ExpanderSummaryContent">
-                  <div>Название: {{act.name}}</div>
+                  <div>
+                    <table class="Table theme_alfa">
+                      <tbody>
+                        <tr>
+                          <td class="Column type_first">Название:</td>
+                          <td class="Column type_second">{{act.name}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                   <button 
                     class="ExpanderIconBtn"
                     type="button"
@@ -105,21 +144,26 @@
                     </svg>
                   </button>
                 </div>
-                <div>
-                  <div v-if="act.guid">
-                    GUID: {{act.guid ? act.guid : '-'}}
-                  </div>
-                  <div v-if="act.guid">
-                    Плагин: 
-                    {{
-                      act.guid
-                        ? plugin.getInstance
-                            .call(null, act.guid)
-                            .constructor.getRegistrationMeta().name
-                        : '-'
-                    }}
-                  </div>
-                </div>
+                <table class="Table theme_alfa">
+                  <tbody>
+                    <tr v-if="act.guid">
+                      <td class="Column type_first">GUID:</td>
+                      <td class="Column type_second">{{act.guid ? act.guid : '-'}}</td>
+                    </tr>
+                    <tr v-if="act.guid">
+                      <td class="Column type_first">Плагин:</td>
+                      <td class="Column type_second">
+                        {{
+                          act.guid
+                            ? plugin.getInstance
+                                .call(null, act.guid)
+                                .constructor.getRegistrationMeta().name
+                            : '-'
+                        }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </base-expander>
             </base-expander-group>
           </div>
