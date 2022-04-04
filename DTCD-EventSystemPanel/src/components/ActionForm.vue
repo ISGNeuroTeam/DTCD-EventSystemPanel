@@ -4,7 +4,7 @@
       <base-heading theme="theme_subheaderSmall">
         <h4>
           {{
-            currentSubscription
+            currentAction
               ? 'Редактировать действие'
               : 'Создание нового действия'
           }}
