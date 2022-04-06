@@ -180,8 +180,6 @@
 
     <SubscriptionForm
       v-if="typeVisibleWindow === 'Subscription_Form'"
-      :allEvents="events"
-      :allActions="actions"
       :toggleWindow="toggleWindow"
       :currentSubscription="chosenSubscription"
     ></SubscriptionForm>
@@ -209,7 +207,6 @@ export default {
       eventSystem: this.$root.eventSystem,
       plugin: this.$root.pluginInstance,
       subscriptions: [],
-      events: [],
       actions: [],
       typeVisibleWindow: 'Main',
       chosenAction: null,
@@ -218,7 +215,6 @@ export default {
   },
   mounted() {
     this.subscriptions = this.eventSystem.subscriptions;
-    this.events = this.eventSystem.events;
     this.actions = this.eventSystem.actions;
   },
   methods: {

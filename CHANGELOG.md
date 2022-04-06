@@ -9,9 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - version of core systems for adapters
+- selection argument of event
 
 ### Changed
 - build process in order to make directory name with current version of plugin
+- ui and ux of the panel
+
+### Removed
+- insertion of css-variables
 
 ## [0.1.0]
 

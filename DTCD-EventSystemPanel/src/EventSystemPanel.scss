@@ -47,12 +47,16 @@
   .Subtitle {
     font-weight: 700;
     margin-top: 0;
-    margin-bottom: 22px;
+    margin-bottom: 10px;
   }
 
   .BtnBackWrapper,
   .FieldContainer {
     padding-bottom: 10px;
+
+    &.type_alfa {
+      padding-bottom: 20px;
+    }
   }
 
   .FieldContainer {
@@ -139,6 +143,20 @@
           }
         }
       }
+    }
+  }
+
+  .GridContainer {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 20px;
+
+    .Column {
+      flex: 1 0 auto;
+    }
+
+    &.type_subscription {
+      row-gap: 10px;
     }
   }
 
