@@ -31,8 +31,6 @@ export class EventSystemPanel extends PanelPlugin {
     this.#eventSystem.registerPluginInstance(this);
     this.#styleSystem = new StyleSystemAdapter('0.4.0');
 
-    this.#styleSystem.setVariablesToElement(document.querySelector(selector).parentElement, this.#styleSystem.getCurrentTheme());
-
     const VueJS = this.getDependence('Vue');
     this.#component = new VueJS.default({
       data: () => {
