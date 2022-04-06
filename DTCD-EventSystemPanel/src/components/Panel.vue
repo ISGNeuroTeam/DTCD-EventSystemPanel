@@ -80,8 +80,14 @@
                         </div>
                       </td>
                     </tr>
+                    <tr v-if="sub.event.args.length">
+                      <td class="Column type_first">Аргументы:</td>
+                      <td class="Column type_second">
+                        <pre>{{JSON.stringify(sub.event.args)}}</pre>
+                      </td>
+                    </tr>
                     <tr>
-                      <td class="Column type_first">Действие: </td>
+                      <td class="Column type_first">Действие:</td>
                       <td class="Column type_second">
                         <div>{{sub.action.name}}</div>
                         <div>
@@ -238,8 +244,15 @@ export default {
 
     deleteSubscription(chosenSubscription) {
       const {
-        event: { guid: eventGUID, name: eventName },
-        action: { guid: actionGUID, name: actionName },
+        event: {
+          guid: eventGUID,
+          name: eventName,
+          args,
+        },
+        action: {
+          guid: actionGUID,
+          name: actionName,
+        },
       } = chosenSubscription;
 
       this.eventSystem.unsubscribe(
@@ -247,6 +260,7 @@ export default {
         eventName,
         actionGUID,
         actionName,
+        ...args
       );
     },
   },

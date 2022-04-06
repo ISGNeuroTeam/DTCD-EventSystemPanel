@@ -96,7 +96,7 @@
 
           <div class="FieldContainer">
             <base-select
-              label="Панель"
+              label="Плагин"
               ref="actionSelect"
               size="big"
               required
@@ -108,12 +108,13 @@
               }"
             >
               <div slot="item" v-for="act in allPanelsWithActions" :key="act.guid" :value="act.guid">
-                <div>
+                <div v-if="act.guid !== '-'">
                   <div>GUID: {{ act.guid }}</div>
                   <div>
                     Плагин: {{act.plugin}}
                   </div>
                 </div>
+                <div v-if="act.guid === '-'">{{act.plugin}}</div>
               </div>
             </base-select>
           </div>
@@ -238,17 +239,23 @@ export default {
 
     // custom actions
     this.allPanelsWithActions.push({
-      guid: 'Custom_Actions',
+      guid: '-',
       plugin: 'Пользовательские события',
     });
   },
   methods: {
     createSubscription() {
+      let args = [];
+      try {
+        args = JSON.parse(this.chosenArg);
+      } catch (error) {}
+
       this.eventSystem.subscribe(
         this.chosenPanel,
         this.chosenEvent,
         this.chosenPanelWithActions,
         this.chosenAction,
+        ...args
       );
     },
 
@@ -308,7 +315,7 @@ export default {
       this.allActionsOfChosenPanel = [];
 
       let chosenActionGuid = newValue;
-      if (newValue === 'Custom_Actions') {
+      if (newValue === '-') {
         chosenActionGuid = undefined;
       }
 
