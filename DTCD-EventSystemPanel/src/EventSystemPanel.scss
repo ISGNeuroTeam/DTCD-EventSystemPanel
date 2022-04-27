@@ -31,10 +31,12 @@
     flex: 0 0 auto;
     min-height: 50px;
     border-bottom: 4px solid var(--background_secondary);
+    background-color: var(--background_main);
   }
 
   .Body {
     flex: 1 0 auto;
+    background-color: var(--background_main);
   }
 
   .TabTopBtnWrapper {
@@ -172,6 +174,7 @@
     row-gap: 6px;
     margin: 0 -3px;
     border-top: 4px solid var(--background_secondary);
+    background-color: var(--background_main);
 
     .BtnWrapper {
       min-width: 33.33333333%;
