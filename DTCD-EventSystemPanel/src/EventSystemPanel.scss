@@ -1,0 +1,185 @@
+.EventSystemPanel {
+  font-family: 'Proxima Nova';
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.21;
+  color: var(--text_main);
+  height: 100%;
+
+  &,
+  *,
+  *::after,
+  *::before {
+    box-sizing: border-box;
+  }
+
+  .Wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .Header,
+  .Body,
+  .Footer {
+    padding: 10px;
+  }
+
+  .Header {
+    flex: 0 0 auto;
+    min-height: 50px;
+    border-bottom: 4px solid var(--background_secondary);
+    background-color: var(--background_main);
+  }
+
+  .Body {
+    flex: 1 0 auto;
+    background-color: var(--background_main);
+  }
+
+  .TabTopBtnWrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+    margin-bottom: 22px;
+  }
+
+  .Subtitle {
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+
+  .BtnBackWrapper,
+  .FieldContainer {
+    padding-bottom: 10px;
+
+    &.type_alfa {
+      padding-bottom: 20px;
+    }
+  }
+
+  .FieldContainer {
+    &.type_params {
+      display: flex;
+      align-items: flex-end;
+      column-gap: 20px;
+
+      base-input {
+        width: 100%;
+      }
+    }
+  }
+
+  .ActionParamsAddBtn {
+    flex: none;
+    padding: 0;
+    background: none;
+    border: none;
+    width: 34px;
+    height: 34px;
+    cursor: pointer;
+
+    .Icon {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .ActionParams {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 10px;
+    
+    .ParamsWrapper {
+      padding-bottom: 10px;
+    }
+  }
+
+  .ExpanderIconBtn {
+    display: inline-flex;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex: none;
+
+    * {
+      fill: var(--button_primary);
+    }
+  }
+
+  .ExpanderSummaryContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 8px;
+  }
+
+  .Table {
+    width: 100%;
+
+    &.theme_alfa {
+      table-layout: fixed;
+
+      .Column {
+        vertical-align: top;
+        padding: 0;
+
+        &.type_first {
+          width: 97px;
+          padding-right: 16px;
+        }
+
+        &.type_second {
+          font-weight: 700;
+        }
+      }
+
+      tr {
+        &:not(:last-of-type) {
+          .Column {
+            padding-bottom: 8px;
+          }
+        }
+      }
+
+      pre {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .GridContainer {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 20px;
+
+    .Column {
+      flex: 1 0 auto;
+    }
+
+    &.type_subscription {
+      row-gap: 10px;
+    }
+  }
+
+  .Footer {
+    flex: 0 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 6px;
+    margin: 0 -3px;
+    border-top: 4px solid var(--background_secondary);
+    background-color: var(--background_main);
+
+    .BtnWrapper {
+      min-width: 33.33333333%;
+      flex: 1 1 auto;
+      padding: 0 3px;
+    }
+  }
+}

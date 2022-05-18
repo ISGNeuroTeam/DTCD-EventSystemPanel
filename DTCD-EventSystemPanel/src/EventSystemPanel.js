@@ -4,7 +4,9 @@ import {
   StyleSystemAdapter
 } from '../../DTCD-SDK/index';
 
-import Panel from "./components/Panel.vue"
+import { version } from './../package.json';
+
+import Panel from './components/Panel.vue';
 
 export class EventSystemPanel extends PanelPlugin {
   #guid;
@@ -14,22 +16,20 @@ export class EventSystemPanel extends PanelPlugin {
 
   static getRegistrationMeta() {
     return {
+      version,
       type: 'panel',
       name: 'EventSystemPanel',
       title: 'Панель системы событий и действий',
-      version: '0.1.0',
-      withDependencies:true
+      withDependencies: true
     };
   }
 
   constructor(guid, selector) {
     super();
     this.#guid = guid
-    this.#eventSystem = new EventSystemAdapter(guid);
+    this.#eventSystem = new EventSystemAdapter('0.4.0', guid);
     this.#eventSystem.registerPluginInstance(this);
-    this.#styleSystem = new StyleSystemAdapter();
-
-    this.#styleSystem.setVariablesToElement(document.querySelector(selector).parentElement, this.#styleSystem.getCurrentTheme());
+    this.#styleSystem = new StyleSystemAdapter('0.4.0');
 
     const VueJS = this.getDependence('Vue');
     this.#component = new VueJS.default({

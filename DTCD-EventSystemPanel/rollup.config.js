@@ -3,16 +3,19 @@ import commonjs from '@rollup/plugin-commonjs';
 import vue from 'rollup-plugin-vue';
 import replace from '@rollup/plugin-replace';
 import styles from 'rollup-plugin-styles';
+import json from '@rollup/plugin-json';
 import { babel } from '@rollup/plugin-babel';
+import { version } from './package.json';
 
 const watch = Boolean(process.env.ROLLUP_WATCH);
 
 const pluginName = 'EventSystemPanel';
 const fileDest = watch
-  ? `./../../DTCD/server/plugins/DTCD-${pluginName}/${pluginName}.js`
+  ? `./../../DTCD/server/plugins/DTCD-${pluginName}_${version}/${pluginName}.js`
   : `./build/${pluginName}.js`;
 
 const plugins = [
+  json(),
   vue({
     preprocessStyles: true,
   }),
