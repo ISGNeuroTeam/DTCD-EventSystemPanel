@@ -64,16 +64,7 @@
                       <td class="Column type_first">Событие:</td>
                       <td class="Column type_second">
                         <div>{{sub.event.name}}</div>
-                        <div>
-                          {{
-                            sub.event.guid
-                              ? plugin.getInstance
-                                  .call(null, sub.event.guid)
-                                  .constructor.getRegistrationMeta().name
-                                + ` (${sub.event.guid})`
-                              : ''
-                          }}
-                        </div>
+                        <div>{{sub.eventPluginName}}</div>
                       </td>
                     </tr>
                     <tr v-if="sub.event.args.length">
@@ -86,16 +77,7 @@
                       <td class="Column type_first">Действие:</td>
                       <td class="Column type_second">
                         <div>{{sub.action.name}}</div>
-                        <div>
-                          {{
-                            sub.action.guid
-                              ? plugin.getInstance
-                                  .call(null, sub.action.guid)
-                                  .constructor.getRegistrationMeta().name
-                                + ` (${sub.action.guid})`
-                              : ''
-                          }}
-                        </div>
+                        <div>{{sub.actionPluginName}}</div>
                       </td>
                     </tr>
                   </tbody>
@@ -157,15 +139,7 @@
                     </tr>
                     <tr v-if="act.guid">
                       <td class="Column type_first">Плагин:</td>
-                      <td class="Column type_second">
-                        {{
-                          act.guid
-                            ? plugin.getInstance
-                                .call(null, act.guid)
-                                .constructor.getRegistrationMeta().name
-                            : '-'
-                        }}
-                      </td>
+                      <td class="Column type_second">{{act.pluginName}}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -204,6 +178,7 @@ export default {
     return {
       eventSystem: this.$root.eventSystem,
       plugin: this.$root.pluginInstance,
+      guidPlugin: this.$root.guid,
       subscriptions: [],
       actions: [],
       typeVisibleWindow: 'Main',
@@ -211,9 +186,45 @@ export default {
       chosenSubscription: null,
     };
   },
+  created() {
+  },
   mounted() {
     this.subscriptions = this.eventSystem.subscriptions;
+    this.subscriptions.map((sub) => {
+      try {
+        sub.eventPluginName = '';
+        sub.actionPluginName = '';
+        if (sub.event.guid) {
+          sub.eventPluginName = this.getPluginNameByGUID(sub.event.guid) + ` (${sub.event.guid})`;
+        }
+        if (sub.action.guid) {
+          sub.actionPluginName = this.getPluginNameByGUID(sub.action.guid) + ` (${sub.action.guid})`;
+        }
+      } catch (error) {
+        if (error.message.indexOf('[guid] is undefined') != -1) {
+          sub.eventPluginName = (sub.event.guid === this.guidPlugin) ? 'EventSystemPanel' : '';
+          sub.actionPluginName = (sub.action.guid === this.guidPlugin) ? 'EventSystemPanel' : '';
+        } else {
+          throw error;
+        }
+      }
+    });
+
     this.actions = this.eventSystem.actions;
+    this.actions.map((act) => {
+      try {
+        act.pluginName = '-';
+        if (act.guid) {
+          act.pluginName = this.getPluginNameByGUID(act.guid);
+        }
+      } catch (error) {
+        if (error.message.indexOf('[guid] is undefined') != -1) {
+          act.pluginName = (act.guid === this.guidPlugin) ? 'EventSystemPanel' : '-';
+        } else {
+          throw error;
+        }
+      }
+    });
   },
   methods: {
     toggleWindow(typeWindow) {
@@ -254,6 +265,12 @@ export default {
         actionName,
         ...args
       );
+    },
+
+    getPluginNameByGUID(guid) {
+      return this.plugin.getInstance
+                        .call(null, guid)
+                        .constructor.getRegistrationMeta().name;
     },
   },
 };
