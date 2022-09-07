@@ -41,13 +41,15 @@
                 chosenEvent = '';
               }"
             >
-              <div slot="item" v-for="evt in allPanelsWithEvents" :key="evt.guid" :value="evt.guid">
-                <div>
-                  <div>GUID: {{ evt.guid }}</div>
-                  <div v-if="evt.plugin">
-                    Плагин: {{evt.plugin}}
-                  </div>
-                </div>
+              <div
+                slot="item"
+                v-for="evt in allPanelsWithEvents"
+                :key="evt.guid"
+                :value="evt.guid"
+                :data-visible-value="`GUID: ${evt.guid} Плагин: ${evt.plugin}`"
+              >
+                <div>GUID: {{ evt.guid }}</div>
+                <div v-if="evt.plugin">Плагин: {{evt.plugin}}</div>
               </div>
             </base-select>
           </div>
@@ -65,9 +67,13 @@
               }"
               :disabled="chosenPanel ? false : true"
             >
-              <div slot="item" v-for="name in allEventsOfChosenPanel" :key="name" :value="name">
-                {{name}}
-              </div>
+              <div
+                slot="item"
+                v-for="name in allEventsOfChosenPanel"
+                :key="name"
+                :value="name"
+                :data-visible-value="name"
+              >{{name}}</div>
             </base-select>
           </div>
 
@@ -84,9 +90,13 @@
               @input="(event) => {chosenArg = event.target.value;}"
               :disabled="chosenEvent ? false : true"
             >
-              <div slot="item" v-for="(arg, index) in allArgumentsOfPanel" :key="index" :value="arg">
-                {{arg}}
-              </div>
+              <div
+                slot="item"
+                v-for="(arg, index) in allArgumentsOfPanel"
+                :key="index"
+                :value="arg"
+                :data-visible-value="arg"
+              >{{arg}}</div>
             </base-select>
           </div>
         </div>
@@ -107,12 +117,16 @@
                 chosenAction = '';
               }"
             >
-              <div slot="item" v-for="act in allPanelsWithActions" :key="act.guid" :value="act.guid">
+              <div
+                slot="item"
+                v-for="act in allPanelsWithActions"
+                :key="act.guid"
+                :value="act.guid"
+                :data-visible-value="(act.guid !== '-') ? `GUID: ${act.guid} Плагин: ${act.plugin}` : act.plugin"
+              >
                 <div v-if="act.guid !== '-'">
                   <div>GUID: {{ act.guid }}</div>
-                  <div>
-                    Плагин: {{act.plugin}}
-                  </div>
+                  <div>Плагин: {{act.plugin}}</div>
                 </div>
                 <div v-if="act.guid === '-'">{{act.plugin}}</div>
               </div>
@@ -131,9 +145,13 @@
               }"
               :disabled="chosenPanelWithActions ? false : true"
             >
-              <div slot="item" v-for="name in allActionsOfChosenPanel" :key="name" :value="name">
-                {{name}}
-              </div>
+              <div
+                slot="item"
+                v-for="name in allActionsOfChosenPanel"
+                :key="name"
+                :value="name"
+                :data-visible-value="name"
+              >{{name}}</div>
             </base-select>
           </div>
         </div>
