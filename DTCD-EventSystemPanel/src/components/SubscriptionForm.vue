@@ -1,5 +1,5 @@
 <template>
-  <div class="Wrapper">
+  <form @submit.prevent="handleFormSubmit" class="Wrapper">
     <div class="Header">
       <base-heading theme="theme_subheaderSmall">
         <h4>
@@ -22,6 +22,9 @@
           label="Название показателя"
           required="true"
           size="big"
+          @input="(event) => subscriptionName = event.target.value"
+          :value="subscriptionName"
+          :invalid="$v.subscriptionName.$dirty && $v.subscriptionName.$invalid"
         ></base-input>
       </div>
 
@@ -40,6 +43,7 @@
                 chosenPanel = event.target.value;
                 chosenEvent = '';
               }"
+              :invalid="$v.chosenPanel.$dirty && $v.chosenPanel.$invalid"
             >
               <div
                 slot="item"
@@ -65,6 +69,7 @@
                 chosenEvent = event.target.value;
                 chosenArg = '';
               }"
+              :invalid="$v.chosenEvent.$dirty && $v.chosenEvent.$invalid"
               :disabled="chosenPanel ? false : true"
             >
               <div
@@ -88,6 +93,7 @@
               search
               :value="chosenArg"
               @input="(event) => {chosenArg = event.target.value;}"
+              :invalid="$v.chosenArg.$dirty && $v.chosenArg.$invalid"
               :disabled="chosenEvent ? false : true"
             >
               <div
@@ -116,6 +122,7 @@
                 chosenPanelWithActions = event.target.value;
                 chosenAction = '';
               }"
+              :invalid="$v.chosenPanelWithActions.$dirty && $v.chosenPanelWithActions.$invalid"
             >
               <div
                 slot="item"
@@ -144,6 +151,7 @@
                 chosenAction = event.target.value;
               }"
               :disabled="chosenPanelWithActions ? false : true"
+              :invalid="$v.chosenAction.$dirty && $v.chosenAction.$invalid"
             >
               <div
                 slot="item"
@@ -186,10 +194,13 @@
         >Сохранить</base-button>
       </div>
     </div>
-  </div>
+  </form>
 </template>
 
 <script>
+import { validationMixin } from 'vuelidate';
+import { required, requiredIf } from '@vuelidate/validators/dist/raw.esm';
+
 import BtnBack from './BtnBack';
 
 export default {
@@ -197,6 +208,7 @@ export default {
   components: {
     BtnBack,
   },
+  mixins: [validationMixin],
   props: [
     'toggleWindow',
     'currentSubscription',
@@ -205,6 +217,8 @@ export default {
     return {
       eventSystem: this.$root.eventSystem,
       plugin: this.$root.pluginInstance,
+
+      subscriptionName: '',
       
       allPanelsWithEvents: [],
       chosenPanel: this.currentSubscription ? this.currentSubscription.event.guid : '',
@@ -220,6 +234,30 @@ export default {
 
       allActionsOfChosenPanel: [],
       chosenAction: this.currentSubscription ? this.currentSubscription.action.name : '',
+    };
+  },
+  validations() {
+    return {
+      subscriptionName: {
+        required,
+      },
+      chosenPanel: {
+        required,
+      },
+      chosenEvent: {
+        required,
+      },
+      chosenArg: {
+        required: requiredIf(() => {
+          return this.allArgumentsOfPanel.length;
+        }),
+      },
+      chosenPanelWithActions: {
+        required,
+      },
+      chosenAction: {
+        required,
+      },
     };
   },
   mounted() {
@@ -299,9 +337,18 @@ export default {
 
     handleSubmitBtnClick(event) {
       event.preventDefault();
-      this.createSubscription();
-      this.toggleWindow();
-    }
+      this.handleFormSubmit();
+    },
+
+    handleFormSubmit(event) {
+      (event instanceof Event) && event.preventDefault();
+      this.$v.$touch();
+
+      if (!this.$v.$invalid) {
+        this.createSubscription();
+        this.toggleWindow();
+      }
+    },
   },
   watch: {
     chosenPanel(newValue) {
