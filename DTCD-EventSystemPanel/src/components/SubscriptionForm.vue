@@ -14,7 +14,7 @@
 
     <div class="Body">
       <div class="BtnBackWrapper">
-        <BtnBack @click="() => toggleWindow()"/>
+        <BtnBack @click="$emit('closeSubscriptionForm')"/>
       </div>
 
       <div class="FieldContainer type_alfa">
@@ -183,7 +183,7 @@
           width="full"
           size="big"
           theme="theme_secondary"
-          @click="() => toggleWindow()"
+          @click="$emit('closeSubscriptionForm')"
         >Отменить</base-button>
       </div>
       <div class="BtnWrapper">
@@ -210,7 +210,6 @@ export default {
   },
   mixins: [validationMixin],
   props: [
-    'toggleWindow',
     'currentSubscription',
   ],
   data() {
@@ -332,7 +331,7 @@ export default {
         actionName,
       );
 
-      this.toggleWindow();
+      this.$emit('closeSubscriptionForm');
     },
 
     handleSubmitBtnClick(event) {
@@ -346,7 +345,7 @@ export default {
 
       if (!this.$v.$invalid) {
         this.createSubscription();
-        this.toggleWindow();
+        this.$emit('closeSubscriptionForm');
       }
     },
   },

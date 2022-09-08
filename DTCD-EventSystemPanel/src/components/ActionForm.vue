@@ -14,7 +14,7 @@
 
     <div class="Body">
       <div class="BtnBackWrapper">
-        <BtnBack @click="() => toggleWindow()"/>
+        <BtnBack @click="$emit('closeActionForm')"/>
       </div>
 
       <div class="FieldContainer">
@@ -86,7 +86,7 @@
           width="full"
           size="big"
           theme="theme_secondary"
-          @click="() => toggleWindow()"
+          @click="$emit('closeActionForm')"
         >Отменить</base-button>
       </div>
       <div class="BtnWrapper">
@@ -113,7 +113,6 @@ export default {
   },
   mixins: [validationMixin],
   props: [
-    'toggleWindow',
     'currentAction',
   ],
   data() {
@@ -147,14 +146,14 @@ export default {
 
       if (!this.$v.$invalid) {
         this.saveCustomAction();
-        this.toggleWindow();
+        this.$emit('closeActionForm');
       }
     },
 
     handleDeleteBtnClick(event) {
       event.preventDefault();
       this.eventSystem.removeCustomAction(this.temp.name);
-      this.toggleWindow();
+      this.$emit('closeActionForm');
     },
 
     addNewParameter() {
