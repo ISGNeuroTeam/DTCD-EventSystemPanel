@@ -1,10 +1,8 @@
 <template>
-  <div 
-    class="EventSystemPanel"
-  >
+  <div class="EventSystemPanel">
     <div
       class="Wrapper"
-      :style="{display: typeVisibleWindow === 'Main' ? '' : 'none'}"
+      v-if="typeVisibleWindow === 'Main'"
     >
       <div class="Header">
         <base-heading theme="theme_subheaderSmall">
@@ -152,13 +150,13 @@
 
     <SubscriptionForm
       v-if="typeVisibleWindow === 'Subscription_Form'"
-      :toggleWindow="toggleWindow"
+      @closeSubscriptionForm="toggleWindow()"
       :currentSubscription="chosenSubscription"
     ></SubscriptionForm>
 
     <ActionForm
       v-if="typeVisibleWindow === 'Action_Form'"
-      :toggleWindow="toggleWindow"
+      @closeActionForm="toggleWindow()"
       :currentAction="chosenAction"
     ></ActionForm>
   </div>

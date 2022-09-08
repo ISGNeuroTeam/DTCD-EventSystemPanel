@@ -1,5 +1,5 @@
 <template>
-  <div class="Wrapper">
+  <form @submit.prevent="handleFormSubmit" class="Wrapper">
     <div class="Header">
       <base-heading theme="theme_subheaderSmall">
         <h4>
@@ -14,16 +14,17 @@
 
     <div class="Body">
       <div class="BtnBackWrapper">
-        <BtnBack @click="() => toggleWindow()"/>
+        <BtnBack @click="$emit('closeActionForm')"/>
       </div>
 
       <div class="FieldContainer">
         <base-input
           label="Название действия"
-          required="true"
+          required
           size="big"
           :value="temp.name"
           @input="(e) => (temp.name = e.target.value)"
+          :invalid="$v.temp.name.$dirty && $v.temp.name.$invalid"
         ></base-input>
       </div>
 
@@ -58,11 +59,12 @@
       <div class="FieldContainer">
         <base-textarea
           label="Функция"
-          required="true"
+          required
           placeholder="Тело JS-функции"
           size="big"
           :value="temp.body"
           @input="(e) => (temp.body = e.target.value)"
+          :invalid="$v.temp.body.$dirty && $v.temp.body.$invalid"
         ></base-textarea>
       </div>
     </div>
@@ -84,7 +86,7 @@
           width="full"
           size="big"
           theme="theme_secondary"
-          @click="() => toggleWindow()"
+          @click="$emit('closeActionForm')"
         >Отменить</base-button>
       </div>
       <div class="BtnWrapper">
@@ -95,10 +97,13 @@
         >Сохранить</base-button>
       </div>
     </div>
-  </div>
+  </form>
 </template>
 
 <script>
+import { validationMixin } from 'vuelidate';
+import { required } from '@vuelidate/validators/dist/raw.esm';
+
 import BtnBack from './BtnBack';
 
 export default {
@@ -106,8 +111,8 @@ export default {
   components: {
     BtnBack,
   },
+  mixins: [validationMixin],
   props: [
-    'toggleWindow',
     'currentAction',
   ],
   data() {
@@ -121,17 +126,34 @@ export default {
       newParamTemp: '',
     };
   },
+  validations() {
+    return {
+      temp: {
+        name: { required },
+        body: { required },
+      }
+    };
+  },
   methods: {
     handleSubmitBtnClick(event) {
       event.preventDefault();
-      this.saveCustomAction();
-      this.toggleWindow();
+      this.handleFormSubmit();
+    },
+
+    handleFormSubmit(event) {
+      (event instanceof Event) && event.preventDefault();
+      this.$v.$touch();
+
+      if (!this.$v.$invalid) {
+        this.saveCustomAction();
+        this.$emit('closeActionForm');
+      }
     },
 
     handleDeleteBtnClick(event) {
       event.preventDefault();
       this.eventSystem.removeCustomAction(this.temp.name);
-      this.toggleWindow();
+      this.$emit('closeActionForm');
     },
 
     addNewParameter() {
