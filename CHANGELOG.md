@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Added
+
+- checking subscription and action forms
+
+### Changed
+
+- chosen visible values of BaseSelect
+- closing forms
+
 ### Fixed
 
 - getting plugin name
