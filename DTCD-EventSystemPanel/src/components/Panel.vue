@@ -184,9 +184,8 @@ export default {
       chosenSubscription: null,
     };
   },
-  created() {
-  },
   mounted() {
+    this.$root.logSystem.debug('Starting processing subscriptions.');
     this.subscriptions = this.eventSystem.subscriptions;
     this.subscriptions.map((sub) => {
       try {
@@ -207,7 +206,9 @@ export default {
         }
       }
     });
+    this.$root.logSystem.debug('Ending processing subscriptions.');
 
+    this.$root.logSystem.debug('Starting processing actions.');
     this.actions = this.eventSystem.actions;
     this.actions.map((act) => {
       try {
@@ -223,13 +224,16 @@ export default {
         }
       }
     });
+    this.$root.logSystem.debug('Ending processing actions.');
   },
   methods: {
-    toggleWindow(typeWindow) {
-      switch (typeWindow) {
+    toggleWindow(typeTargetPanel) {
+      this.$root.logSystem.info(`Change screens to '${typeTargetPanel}'.`);
+
+      switch (typeTargetPanel) {
         case 'Subscription_Form':
         case 'Action_Form':
-          this.typeVisibleWindow = typeWindow;
+          this.typeVisibleWindow = typeTargetPanel;
           break;
 
         case 'Main':
@@ -263,6 +267,8 @@ export default {
         actionName,
         ...args
       );
+
+      this.$root.logSystem.info(`Deleted subscription.`);
     },
 
     getPluginNameByGUID(guid) {

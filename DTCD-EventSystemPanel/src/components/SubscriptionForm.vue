@@ -312,6 +312,8 @@ export default {
         this.chosenAction,
         ...args
       );
+
+      this.$root.logSystem.info(`Created subscription.`);
     },
 
     deleteSubscription() {
@@ -331,6 +333,7 @@ export default {
         actionName,
       );
 
+      this.$root.logSystem.info(`Deleted subscription.`);
       this.$emit('closeSubscriptionForm');
     },
 
@@ -341,6 +344,7 @@ export default {
 
     handleFormSubmit(event) {
       (event instanceof Event) && event.preventDefault();
+      this.$root.logSystem.debug(`Submitted subscription form.`);
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
@@ -351,6 +355,8 @@ export default {
   },
   watch: {
     chosenPanel(newValue) {
+      this.$root.logSystem.debug(`Start creation of array with all events of chosen panel.`);
+
       this.allEventsOfChosenPanel = [];
 
       this.eventSystem.events.forEach((event) => {
@@ -358,9 +364,13 @@ export default {
           this.allEventsOfChosenPanel.push(event.name);
         }
       });
+
+      this.$root.logSystem.debug(`End creation of array with all events of chosen panel.`);
     },
 
     chosenEvent(newValue) {
+      this.$root.logSystem.debug(`Start creation of array with all arguments of panel.`);
+
       this.allArgumentsOfPanel = [];
 
       this.eventSystem.events.forEach((event) => {
@@ -373,9 +383,13 @@ export default {
           this.allArgumentsOfPanel.push(event.args);
         }
       });
+
+      this.$root.logSystem.debug(`End creation of array with all arguments of panel.`);
     },
 
     chosenPanelWithActions(newValue) {
+      this.$root.logSystem.debug(`Start creation of array with all actions of chosen panel.`);
+
       this.allActionsOfChosenPanel = [];
 
       let chosenActionGuid = newValue;
@@ -388,6 +402,8 @@ export default {
           this.allActionsOfChosenPanel.push(action.name);
         }
       });
+
+      this.$root.logSystem.debug(`End creation of array with all actions of chosen panel.`);
     },
   }
 };

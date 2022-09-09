@@ -142,6 +142,7 @@ export default {
 
     handleFormSubmit(event) {
       (event instanceof Event) && event.preventDefault();
+      this.$root.logSystem.debug(`Submitted action form.`);
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
@@ -153,6 +154,7 @@ export default {
     handleDeleteBtnClick(event) {
       event.preventDefault();
       this.eventSystem.removeCustomAction(this.temp.name);
+      this.$root.logSystem.info(`Removed custom action.`);
       this.$emit('closeActionForm');
     },
 
@@ -170,6 +172,7 @@ export default {
     saveCustomAction() {
       const { name, parameters, body } = this.temp;
       this.eventSystem.registerCustomAction(name, new Function(...parameters, body));
+      this.$root.logSystem.info(`Registered custom action.`);
       this.temp = {};
     },
   },
