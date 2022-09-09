@@ -2,7 +2,7 @@
   <div class="EventSystemPanel">
     <div
       class="Wrapper"
-      v-if="typeVisibleWindow === 'Main'"
+      :style="{display: typeVisibleWindow === 'Main' ? '' : 'none'}"
     >
       <div class="Header">
         <base-heading theme="theme_subheaderSmall">
