@@ -22,7 +22,7 @@
               >Добавить новую подписку</base-button>
             </div>
 
-            <h5 class="Subtitle">Активыне подписки</h5>
+            <h5 class="Subtitle">Активные подписки</h5>
 
             <base-expander-group>
               <base-expander

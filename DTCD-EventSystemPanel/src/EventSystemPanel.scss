@@ -182,4 +182,10 @@
       padding: 0 3px;
     }
   }
+
+  .FontIcon {
+    &.name_plusCircle {
+      color: var(--button_primary);
+    }
+  } 
 }
