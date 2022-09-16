@@ -1,7 +1,8 @@
 import {
   PanelPlugin,
   EventSystemAdapter,
-  StyleSystemAdapter
+  StyleSystemAdapter,
+  LogSystemAdapter,
 } from '../../DTCD-SDK/index';
 
 import { version } from './../package.json';
@@ -30,6 +31,7 @@ export class EventSystemPanel extends PanelPlugin {
     this.#eventSystem = new EventSystemAdapter('0.4.0', guid);
     this.#eventSystem.registerPluginInstance(this);
     this.#styleSystem = new StyleSystemAdapter('0.4.0');
+    const logSystem = new LogSystemAdapter('0.7.0', guid, EventSystemPanel.getRegistrationMeta().name);
 
     const VueJS = this.getDependence('Vue');
     this.#component = new VueJS.default({
@@ -37,6 +39,7 @@ export class EventSystemPanel extends PanelPlugin {
         return {
           eventSystem: this.#eventSystem,
           styleSystem: this.#styleSystem,
+          logSystem,
           pluginInstance: this,
           guid
         }
