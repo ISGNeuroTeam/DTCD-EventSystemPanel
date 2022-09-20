@@ -109,7 +109,7 @@
 
           <div class="FieldContainer">
             <base-select
-              label="Плагин"
+              label="Панель"
               ref="actionSelect"
               size="big"
               required
