@@ -51,7 +51,7 @@
                 :key="evt.guid"
                 :value="evt.guid"
                 :data-visible-value="evt.guid"
-              >{{ evt.guid }}</div>
+              >{{ evt.guid || '-' }}</div>
             </base-select>
           </div>
 
@@ -127,7 +127,7 @@
                 :key="act.guid"
                 :value="act.guid"
                 :data-visible-value="act.guid"
-              >{{ act.guid }}</div>
+              >{{ act.guid || '-' }}</div>
             </base-select>
           </div>
 
