@@ -50,11 +50,8 @@
                 v-for="evt in allPanelsWithEvents"
                 :key="evt.guid"
                 :value="evt.guid"
-                :data-visible-value="`GUID: ${evt.guid} Плагин: ${evt.plugin}`"
-              >
-                <div>GUID: {{ evt.guid }}</div>
-                <div v-if="evt.plugin">Плагин: {{evt.plugin}}</div>
-              </div>
+                :data-visible-value="evt.guid"
+              >{{ evt.guid }}</div>
             </base-select>
           </div>
 
@@ -129,14 +126,8 @@
                 v-for="act in allPanelsWithActions"
                 :key="act.guid"
                 :value="act.guid"
-                :data-visible-value="(act.guid !== '-') ? `GUID: ${act.guid} Плагин: ${act.plugin}` : act.plugin"
-              >
-                <div v-if="act.guid !== '-'">
-                  <div>GUID: {{ act.guid }}</div>
-                  <div>Плагин: {{act.plugin}}</div>
-                </div>
-                <div v-if="act.guid === '-'">{{act.plugin}}</div>
-              </div>
+                :data-visible-value="act.guid"
+              >{{ act.guid }}</div>
             </base-select>
           </div>
 
@@ -268,11 +259,6 @@ export default {
     for (const guid of panelsGuidSet) {
       this.allPanelsWithEvents.push({
         guid,
-        plugin: guid
-                  ? this.plugin.getInstance
-                      .call(null, guid)
-                      .constructor.getRegistrationMeta().name
-                  : '',
       });
     }
 
@@ -284,18 +270,12 @@ export default {
     for (const guid of panelsActionSet) {
       this.allPanelsWithActions.push({
         guid,
-        plugin: guid
-                  ? this.plugin.getInstance
-                      .call(null, guid)
-                      .constructor.getRegistrationMeta().name
-                  : '',
       });
     }
 
     // custom actions
     this.allPanelsWithActions.push({
-      guid: '-',
-      plugin: 'Пользовательские события',
+      guid: '-'
     });
   },
   methods: {

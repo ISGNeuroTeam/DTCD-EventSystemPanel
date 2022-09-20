@@ -7,9 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
-### Changed
+### Removed
 
-- removed `EventSystem` plugin instance registration
+- `EventSystem` plugin instance registration
+- getting and output plugins name
 
 ## [0.4.0]
 
