@@ -62,7 +62,7 @@
                       <td class="Column type_first">Событие:</td>
                       <td class="Column type_second">
                         <div>{{sub.event.name}}</div>
-                        <div>{{sub.eventPluginName}}</div>
+                        <div>{{sub.event.guid}}</div>
                       </td>
                     </tr>
                     <tr v-if="sub.event.args.length">
@@ -75,7 +75,7 @@
                       <td class="Column type_first">Действие:</td>
                       <td class="Column type_second">
                         <div>{{sub.action.name}}</div>
-                        <div>{{sub.actionPluginName}}</div>
+                        <div>{{sub.action.guid}}</div>
                       </td>
                     </tr>
                   </tbody>
@@ -135,10 +135,6 @@
                       <td class="Column type_first">GUID:</td>
                       <td class="Column type_second">{{act.guid ? act.guid : '-'}}</td>
                     </tr>
-                    <tr v-if="act.guid">
-                      <td class="Column type_first">Плагин:</td>
-                      <td class="Column type_second">{{act.pluginName}}</td>
-                    </tr>
                   </tbody>
                 </table>
               </base-expander>
@@ -176,7 +172,6 @@ export default {
     return {
       eventSystem: this.$root.eventSystem,
       plugin: this.$root.pluginInstance,
-      guidPlugin: this.$root.guid,
       subscriptions: [],
       actions: [],
       typeVisibleWindow: 'Main',
@@ -185,46 +180,8 @@ export default {
     };
   },
   mounted() {
-    this.$root.logSystem.debug('Starting processing subscriptions.');
     this.subscriptions = this.eventSystem.subscriptions;
-    this.subscriptions.map((sub) => {
-      try {
-        sub.eventPluginName = '';
-        sub.actionPluginName = '';
-        if (sub.event.guid) {
-          sub.eventPluginName = this.getPluginNameByGUID(sub.event.guid) + ` (${sub.event.guid})`;
-        }
-        if (sub.action.guid) {
-          sub.actionPluginName = this.getPluginNameByGUID(sub.action.guid) + ` (${sub.action.guid})`;
-        }
-      } catch (error) {
-        if (error.message.indexOf('[guid] is undefined') != -1) {
-          sub.eventPluginName = (sub.event.guid === this.guidPlugin) ? 'EventSystemPanel' : '';
-          sub.actionPluginName = (sub.action.guid === this.guidPlugin) ? 'EventSystemPanel' : '';
-        } else {
-          throw error;
-        }
-      }
-    });
-    this.$root.logSystem.debug('Ending processing subscriptions.');
-
-    this.$root.logSystem.debug('Starting processing actions.');
     this.actions = this.eventSystem.actions;
-    this.actions.map((act) => {
-      try {
-        act.pluginName = '-';
-        if (act.guid) {
-          act.pluginName = this.getPluginNameByGUID(act.guid);
-        }
-      } catch (error) {
-        if (error.message.indexOf('[guid] is undefined') != -1) {
-          act.pluginName = (act.guid === this.guidPlugin) ? 'EventSystemPanel' : '-';
-        } else {
-          throw error;
-        }
-      }
-    });
-    this.$root.logSystem.debug('Ending processing actions.');
   },
   methods: {
     toggleWindow(typeTargetPanel) {
@@ -269,12 +226,6 @@ export default {
       );
 
       this.$root.logSystem.info(`Deleted subscription.`);
-    },
-
-    getPluginNameByGUID(guid) {
-      return this.plugin.getInstance
-                        .call(null, guid)
-                        .constructor.getRegistrationMeta().name;
     },
   },
 };

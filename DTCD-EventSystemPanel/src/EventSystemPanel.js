@@ -29,7 +29,6 @@ export class EventSystemPanel extends PanelPlugin {
     super();
     this.#guid = guid
     this.#eventSystem = new EventSystemAdapter('0.4.0', guid);
-    this.#eventSystem.registerPluginInstance(this);
     this.#styleSystem = new StyleSystemAdapter('0.4.0');
     const logSystem = new LogSystemAdapter('0.7.0', guid, EventSystemPanel.getRegistrationMeta().name);
 
