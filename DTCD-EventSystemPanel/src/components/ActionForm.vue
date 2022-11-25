@@ -60,6 +60,8 @@
         <base-textarea
           label="Функция"
           required
+          data-autoheight
+          theme="resize_off"
           placeholder="Тело JS-функции"
           size="big"
           :value="temp.body"
