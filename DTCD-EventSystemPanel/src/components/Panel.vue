@@ -2,7 +2,7 @@
   <div class="EventSystemPanel">
     <div
       class="Wrapper"
-      :style="{display: typeVisibleWindow === 'Main' ? '' : 'none'}"
+      :style="{display: $root.typeVisibleWindow === 'Main' ? '' : 'none'}"
     >
       <div class="Header">
         <base-heading theme="theme_subheaderSmall">
@@ -11,7 +11,10 @@
       </div>
 
       <div class="Body">
-        <base-tabs>
+        <base-tabs
+          :data-active-tab="$root.indexActiveTab"
+          @select="(event) => {this.$root.indexActiveTab = event.detail.indexActiveTab}"
+        >
           <div slot="tab" tab-name="Активные подписки">
             <div class="TabTopBtnWrapper">
               <base-button
@@ -145,13 +148,13 @@
     </div>
 
     <SubscriptionForm
-      v-if="typeVisibleWindow === 'Subscription_Form'"
+      v-if="$root.typeVisibleWindow === 'Subscription_Form'"
       @closeSubscriptionForm="toggleWindow()"
       :currentSubscription="chosenSubscription"
     ></SubscriptionForm>
 
     <ActionForm
-      v-if="typeVisibleWindow === 'Action_Form'"
+      v-if="$root.typeVisibleWindow === 'Action_Form'"
       @closeActionForm="toggleWindow()"
       :currentAction="chosenAction"
     ></ActionForm>
@@ -174,7 +177,6 @@ export default {
       plugin: this.$root.pluginInstance,
       subscriptions: [],
       actions: [],
-      typeVisibleWindow: 'Main',
       chosenAction: null,
       chosenSubscription: null,
     };
@@ -190,12 +192,12 @@ export default {
       switch (typeTargetPanel) {
         case 'Subscription_Form':
         case 'Action_Form':
-          this.typeVisibleWindow = typeTargetPanel;
+          this.$root.typeVisibleWindow = typeTargetPanel;
           break;
 
         case 'Main':
         default:
-          this.typeVisibleWindow = 'Main';
+          this.$root.typeVisibleWindow = 'Main';
           this.chosenAction = null;
           this.chosenSubscription = null;
           break;
