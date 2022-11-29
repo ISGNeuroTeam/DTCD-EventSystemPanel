@@ -22,9 +22,9 @@
           label="Название действия"
           required
           size="big"
-          :value="dataActionForm.name"
-          @input="(e) => (dataActionForm.name = e.target.value)"
-          :invalid="$v.dataActionForm.name.$dirty && $v.dataActionForm.name.$invalid"
+          :value="actionFormData.name"
+          @input="(e) => (actionFormData.name = e.target.value)"
+          :invalid="$v.actionFormData.name.$dirty && $v.actionFormData.name.$invalid"
         ></base-input>
       </div>
 
@@ -32,8 +32,8 @@
         <base-input 
           label="Имя параметра"
           size="big"
-          :value="dataActionForm.nameNewParam"
-          @input="(e) => (dataActionForm.nameNewParam = e.target.value)"
+          :value="actionFormData.nameNewParam"
+          @input="(e) => (actionFormData.nameNewParam = e.target.value)"
         ></base-input>
         <button
           type="button"
@@ -49,7 +49,7 @@
         <base-chip
           class="ParamsWrapper"
           close="remove"
-          v-for="(param, index) in dataActionForm.parameters"
+          v-for="(param, index) in actionFormData.parameters"
           @remove="removeParameter(index)"
           :key="index"
           >{{ param }}</base-chip
@@ -62,9 +62,9 @@
           required
           placeholder="Тело JS-функции"
           size="big"
-          :value="dataActionForm.body"
-          @input="(e) => (dataActionForm.body = e.target.value)"
-          :invalid="$v.dataActionForm.body.$dirty && $v.dataActionForm.body.$invalid"
+          :value="actionFormData.body"
+          @input="(e) => (actionFormData.body = e.target.value)"
+          :invalid="$v.actionFormData.body.$dirty && $v.actionFormData.body.$invalid"
         ></base-textarea>
       </div>
     </div>
@@ -118,19 +118,19 @@ export default {
   data() {
     return {
       eventSystem: this.$root.eventSystem,
-      dataActionForm: this.currentAction
+      actionFormData: this.currentAction
                       ? {
                         name: this.currentAction.name,
                         nameNewParam: '',
                         parameters: [],
                         body: this.currentAction.body,
                       }
-                      : this.$root.dataActionForm,
+                      : this.$root.actionFormData,
     };
   },
   validations() {
     return {
-      dataActionForm: {
+      actionFormData: {
         name: { required },
         body: { required },
       }
@@ -155,30 +155,30 @@ export default {
 
     handleDeleteBtnClick(event) {
       event.preventDefault();
-      this.eventSystem.removeCustomAction(this.dataActionForm.name);
+      this.eventSystem.removeCustomAction(this.actionFormData.name);
       this.$root.logSystem.info(`Removed custom action.`);
       this.$emit('closeActionForm');
     },
 
     addNewParameter() {
-      if (this.dataActionForm.nameNewParam) {
-        if (!Array.isArray(this.dataActionForm.parameters)) {
-          this.dataActionForm.parameters = [];
+      if (this.actionFormData.nameNewParam) {
+        if (!Array.isArray(this.actionFormData.parameters)) {
+          this.actionFormData.parameters = [];
         }
-        this.dataActionForm.parameters.push(this.dataActionForm.nameNewParam);
-        this.dataActionForm.nameNewParam = '';
+        this.actionFormData.parameters.push(this.actionFormData.nameNewParam);
+        this.actionFormData.nameNewParam = '';
       }
     },
 
     removeParameter(index) {
-      this.dataActionForm.parameters.splice(index, 1);
+      this.actionFormData.parameters.splice(index, 1);
     },
 
     saveCustomAction() {
-      const { name, parameters, body } = this.dataActionForm;
+      const { name, parameters, body } = this.actionFormData;
       this.eventSystem.registerCustomAction(name, new Function(...parameters, body));
       this.$root.logSystem.info(`Registered custom action.`);
-      this.$root.dataActionForm = {
+      this.$root.actionFormData = {
         name: '',
         nameNewParam: '',
         parameters: [],
@@ -187,8 +187,8 @@ export default {
     },
   },
   watch: {
-    dataActionForm(val) {
-      this.$root.dataActionForm = val;
+    actionFormData(val) {
+      this.$root.actionFormData = val;
     },
   },
 };
