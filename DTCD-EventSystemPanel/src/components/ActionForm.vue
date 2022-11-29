@@ -22,9 +22,9 @@
           label="Название действия"
           required
           size="big"
-          :value="temp.name"
-          @input="(e) => (temp.name = e.target.value)"
-          :invalid="$v.temp.name.$dirty && $v.temp.name.$invalid"
+          :value="dataActionForm.name"
+          @input="(e) => (dataActionForm.name = e.target.value)"
+          :invalid="$v.dataActionForm.name.$dirty && $v.dataActionForm.name.$invalid"
         ></base-input>
       </div>
 
@@ -32,8 +32,8 @@
         <base-input 
           label="Имя параметра"
           size="big"
-          :value="newParamTemp"
-          @input="(e) => (newParamTemp = e.target.value)"
+          :value="dataActionForm.nameNewParam"
+          @input="(e) => (dataActionForm.nameNewParam = e.target.value)"
         ></base-input>
         <button
           type="button"
@@ -49,7 +49,7 @@
         <base-chip
           class="ParamsWrapper"
           close="remove"
-          v-for="(param, index) in temp.parameters"
+          v-for="(param, index) in dataActionForm.parameters"
           @remove="removeParameter(index)"
           :key="index"
           >{{ param }}</base-chip
@@ -62,9 +62,9 @@
           required
           placeholder="Тело JS-функции"
           size="big"
-          :value="temp.body"
-          @input="(e) => (temp.body = e.target.value)"
-          :invalid="$v.temp.body.$dirty && $v.temp.body.$invalid"
+          :value="dataActionForm.body"
+          @input="(e) => (dataActionForm.body = e.target.value)"
+          :invalid="$v.dataActionForm.body.$dirty && $v.dataActionForm.body.$invalid"
         ></base-textarea>
       </div>
     </div>
@@ -118,17 +118,19 @@ export default {
   data() {
     return {
       eventSystem: this.$root.eventSystem,
-      temp: {
-        name: this.currentAction ? this.currentAction.name : '',
-        parameters: [],
-        body: this.currentAction ? this.currentAction.body : '',
-      },
-      newParamTemp: '',
+      dataActionForm: this.currentAction
+                      ? {
+                        name: this.currentAction.name,
+                        nameNewParam: '',
+                        parameters: [],
+                        body: this.currentAction.body,
+                      }
+                      : this.$root.dataActionForm,
     };
   },
   validations() {
     return {
-      temp: {
+      dataActionForm: {
         name: { required },
         body: { required },
       }
@@ -153,27 +155,40 @@ export default {
 
     handleDeleteBtnClick(event) {
       event.preventDefault();
-      this.eventSystem.removeCustomAction(this.temp.name);
+      this.eventSystem.removeCustomAction(this.dataActionForm.name);
       this.$root.logSystem.info(`Removed custom action.`);
       this.$emit('closeActionForm');
     },
 
     addNewParameter() {
-      if (this.newParamTemp) {
-        this.temp.parameters.push(this.newParamTemp);
-        this.newParamTemp = '';
+      if (this.dataActionForm.nameNewParam) {
+        if (!Array.isArray(this.dataActionForm.parameters)) {
+          this.dataActionForm.parameters = [];
+        }
+        this.dataActionForm.parameters.push(this.dataActionForm.nameNewParam);
+        this.dataActionForm.nameNewParam = '';
       }
     },
 
     removeParameter(index) {
-      this.temp.parameters.splice(index, 1);
+      this.dataActionForm.parameters.splice(index, 1);
     },
 
     saveCustomAction() {
-      const { name, parameters, body } = this.temp;
+      const { name, parameters, body } = this.dataActionForm;
       this.eventSystem.registerCustomAction(name, new Function(...parameters, body));
       this.$root.logSystem.info(`Registered custom action.`);
-      this.temp = {};
+      this.$root.dataActionForm = {
+        name: '',
+        nameNewParam: '',
+        parameters: [],
+        body: '',
+      };
+    },
+  },
+  watch: {
+    dataActionForm(val) {
+      this.$root.dataActionForm = val;
     },
   },
 };

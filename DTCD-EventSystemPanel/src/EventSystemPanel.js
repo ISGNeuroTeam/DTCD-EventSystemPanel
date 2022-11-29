@@ -44,6 +44,13 @@ export class EventSystemPanel extends PanelPlugin {
 
           typeVisibleWindow: 'Main',
           indexActiveTab: 0,
+
+          dataActionForm: {
+            name: '',
+            nameNewParam: '',
+            parameters: [],
+            body: '',
+          },
         };
       },
       render: h => h(Panel),
@@ -54,6 +61,7 @@ export class EventSystemPanel extends PanelPlugin {
     return {
       typeVisibleWindow: this.#vueComponent.typeVisibleWindow,
       indexActiveTab: this.#vueComponent.indexActiveTab,
+      dataActionForm: this.#vueComponent.dataActionForm
     };
   }
 
@@ -63,6 +71,7 @@ export class EventSystemPanel extends PanelPlugin {
     const vueNamesFields = [
       'typeVisibleWindow',
       'indexActiveTab',
+      'dataActionForm',
     ];
 
     for (const [prop, value] of Object.entries(newState)) {
