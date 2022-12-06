@@ -78,7 +78,7 @@
           width="full"
           size="big"
           theme="theme_red"
-          @click="handleDeleteBtnClick"
+          @click.prevent="handleDeleteBtnClick"
         >Удалить действие</base-button>
       </div>
       <div class="BtnWrapper">
@@ -86,14 +86,14 @@
           width="full"
           size="big"
           theme="theme_secondary"
-          @click="$emit('closeActionForm')"
+          @click.prevent="handleCancelBtnClick"
         >Отменить</base-button>
       </div>
       <div class="BtnWrapper">
         <base-button
           width="full"
           size="big"
-          @click="handleSubmitBtnClick"
+          @click.prevent="handleSubmitBtnClick"
         >Сохранить</base-button>
       </div>
     </div>
@@ -137,27 +137,29 @@ export default {
     };
   },
   methods: {
-    handleSubmitBtnClick(event) {
-      event.preventDefault();
+    handleCancelBtnClick() {
+      this.resetForm();
+      this.$emit('closeActionForm');
+    },
+
+    handleSubmitBtnClick() {
       this.handleFormSubmit();
     },
 
-    handleFormSubmit(event) {
-      (event instanceof Event) && event.preventDefault();
+    handleFormSubmit() {
       this.$root.logSystem.debug(`Submitted action form.`);
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
         this.saveCustomAction();
-        this.$emit('closeActionForm');
+        this.handleCancelBtnClick();
       }
     },
 
-    handleDeleteBtnClick(event) {
-      event.preventDefault();
+    handleDeleteBtnClick() {
       this.eventSystem.removeCustomAction(this.actionFormData.name);
       this.$root.logSystem.info(`Removed custom action.`);
-      this.$emit('closeActionForm');
+      this.handleCancelBtnClick();
     },
 
     addNewParameter() {
@@ -178,17 +180,15 @@ export default {
       const { name, parameters, body } = this.actionFormData;
       this.eventSystem.registerCustomAction(name, new Function(...parameters, body));
       this.$root.logSystem.info(`Registered custom action.`);
+    },
+
+    resetForm() {
       this.$root.actionFormData = {
         name: '',
         nameNewParam: '',
         parameters: [],
         body: '',
       };
-    },
-  },
-  watch: {
-    actionFormData(val) {
-      this.$root.actionFormData = val;
     },
   },
 };
