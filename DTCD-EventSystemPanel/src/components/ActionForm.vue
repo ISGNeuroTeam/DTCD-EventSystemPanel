@@ -22,9 +22,9 @@
           label="Название действия"
           required
           size="big"
-          :value="temp.name"
-          @input="(e) => (temp.name = e.target.value)"
-          :invalid="$v.temp.name.$dirty && $v.temp.name.$invalid"
+          :value="actionFormData.name"
+          @input="(e) => (actionFormData.name = e.target.value)"
+          :invalid="$v.actionFormData.name.$dirty && $v.actionFormData.name.$invalid"
         ></base-input>
       </div>
 
@@ -32,8 +32,8 @@
         <base-input 
           label="Имя параметра"
           size="big"
-          :value="newParamTemp"
-          @input="(e) => (newParamTemp = e.target.value)"
+          :value="actionFormData.nameNewParam"
+          @input="(e) => (actionFormData.nameNewParam = e.target.value)"
         ></base-input>
         <button
           type="button"
@@ -49,7 +49,7 @@
         <base-chip
           class="ParamsWrapper"
           close="remove"
-          v-for="(param, index) in temp.parameters"
+          v-for="(param, index) in actionFormData.parameters"
           @remove="removeParameter(index)"
           :key="index"
           >{{ param }}</base-chip
@@ -64,9 +64,9 @@
           theme="resize_off"
           placeholder="Тело JS-функции"
           size="big"
-          :value="temp.body"
-          @input="(e) => (temp.body = e.target.value)"
-          :invalid="$v.temp.body.$dirty && $v.temp.body.$invalid"
+          :value="actionFormData.body"
+          @input="(e) => (actionFormData.body = e.target.value)"
+          :invalid="$v.actionFormData.body.$dirty && $v.actionFormData.body.$invalid"
         ></base-textarea>
       </div>
     </div>
@@ -80,7 +80,7 @@
           width="full"
           size="big"
           theme="theme_red"
-          @click="handleDeleteBtnClick"
+          @click.prevent="handleDeleteBtnClick"
         >Удалить действие</base-button>
       </div>
       <div class="BtnWrapper">
@@ -88,14 +88,14 @@
           width="full"
           size="big"
           theme="theme_secondary"
-          @click="$emit('closeActionForm')"
+          @click.prevent="handleCancelBtnClick"
         >Отменить</base-button>
       </div>
       <div class="BtnWrapper">
         <base-button
           width="full"
           size="big"
-          @click="handleSubmitBtnClick"
+          @click.prevent="handleSubmitBtnClick"
         >Сохранить</base-button>
       </div>
     </div>
@@ -120,62 +120,77 @@ export default {
   data() {
     return {
       eventSystem: this.$root.eventSystem,
-      temp: {
-        name: this.currentAction ? this.currentAction.name : '',
-        parameters: [],
-        body: this.currentAction ? this.currentAction.body : '',
-      },
-      newParamTemp: '',
+      actionFormData: this.currentAction
+                      ? {
+                        name: this.currentAction.name,
+                        nameNewParam: '',
+                        parameters: [],
+                        body: this.currentAction.body,
+                      }
+                      : this.$root.actionFormData,
     };
   },
   validations() {
     return {
-      temp: {
+      actionFormData: {
         name: { required },
         body: { required },
       }
     };
   },
   methods: {
-    handleSubmitBtnClick(event) {
-      event.preventDefault();
+    handleCancelBtnClick() {
+      this.resetForm();
+      this.$emit('closeActionForm');
+    },
+
+    handleSubmitBtnClick() {
       this.handleFormSubmit();
     },
 
-    handleFormSubmit(event) {
-      (event instanceof Event) && event.preventDefault();
+    handleFormSubmit() {
       this.$root.logSystem.debug(`Submitted action form.`);
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
         this.saveCustomAction();
-        this.$emit('closeActionForm');
+        this.handleCancelBtnClick();
       }
     },
 
-    handleDeleteBtnClick(event) {
-      event.preventDefault();
-      this.eventSystem.removeCustomAction(this.temp.name);
+    handleDeleteBtnClick() {
+      this.eventSystem.removeCustomAction(this.actionFormData.name);
       this.$root.logSystem.info(`Removed custom action.`);
-      this.$emit('closeActionForm');
+      this.handleCancelBtnClick();
     },
 
     addNewParameter() {
-      if (this.newParamTemp) {
-        this.temp.parameters.push(this.newParamTemp);
-        this.newParamTemp = '';
+      if (this.actionFormData.nameNewParam) {
+        if (!Array.isArray(this.actionFormData.parameters)) {
+          this.actionFormData.parameters = [];
+        }
+        this.actionFormData.parameters.push(this.actionFormData.nameNewParam);
+        this.actionFormData.nameNewParam = '';
       }
     },
 
     removeParameter(index) {
-      this.temp.parameters.splice(index, 1);
+      this.actionFormData.parameters.splice(index, 1);
     },
 
     saveCustomAction() {
-      const { name, parameters, body } = this.temp;
+      const { name, parameters, body } = this.actionFormData;
       this.eventSystem.registerCustomAction(name, new Function(...parameters, body));
       this.$root.logSystem.info(`Registered custom action.`);
-      this.temp = {};
+    },
+
+    resetForm() {
+      this.$root.actionFormData = {
+        name: '',
+        nameNewParam: '',
+        parameters: [],
+        body: '',
+      };
     },
   },
 };
