@@ -51,6 +51,14 @@ export class EventSystemPanel extends PanelPlugin {
             parameters: [],
             body: '',
           },
+          subscriptionFormData: {
+            subscriptionName: '',
+            chosenPanel: '',
+            chosenEvent: '',
+            chosenArg: '',
+            chosenPanelWithActions: '',
+            chosenAction: '',
+          },
         };
       },
       render: h => h(Panel),
@@ -61,7 +69,8 @@ export class EventSystemPanel extends PanelPlugin {
     return {
       typeVisibleWindow: this.#vueComponent.typeVisibleWindow,
       indexActiveTab: this.#vueComponent.indexActiveTab,
-      actionFormData: this.#vueComponent.actionFormData
+      actionFormData: this.#vueComponent.actionFormData,
+      subscriptionFormData: this.#vueComponent.subscriptionFormData,
     };
   }
 
@@ -72,6 +81,7 @@ export class EventSystemPanel extends PanelPlugin {
       'typeVisibleWindow',
       'indexActiveTab',
       'actionFormData',
+      'subscriptionFormData',
     ];
 
     for (const [prop, value] of Object.entries(newState)) {

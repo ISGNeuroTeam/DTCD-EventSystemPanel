@@ -22,9 +22,9 @@
           label="Название показателя"
           required="true"
           size="big"
-          @input="(event) => subscriptionName = event.target.value"
-          :value="subscriptionName"
-          :invalid="$v.subscriptionName.$dirty && $v.subscriptionName.$invalid"
+          @input="(event) => subscriptionFormData.subscriptionName = event.target.value"
+          :value="subscriptionFormData.subscriptionName"
+          :invalid="$v.subscriptionFormData.subscriptionName.$dirty && $v.subscriptionFormData.subscriptionName.$invalid"
         ></base-input>
       </div>
 
@@ -34,17 +34,17 @@
 
           <div class="FieldContainer">
             <base-select
-              label="Панель"
               size="big"
               required
               search
-              :value="chosenPanel"
+              :value="subscriptionFormData.chosenPanel"
               @input="(event) => {
-                chosenPanel = event.target.value;
-                chosenEvent = '';
+                subscriptionFormData.chosenPanel = event.target.value;
+                subscriptionFormData.chosenEvent = '';
               }"
-              :invalid="$v.chosenPanel.$dirty && $v.chosenPanel.$invalid"
+              :invalid="$v.subscriptionFormData.chosenPanel.$dirty && $v.subscriptionFormData.chosenPanel.$invalid"
             >
+              <span slot="label">Панель</span>
               <div
                 slot="item"
                 v-for="evt in allPanelsWithEvents"
@@ -57,18 +57,18 @@
 
           <div class="FieldContainer">
             <base-select
-              label="Событие панели"
               size="big"
               required
               search
-              :value="chosenEvent"
+              :value="subscriptionFormData.chosenEvent"
               @input="(event) => {
-                chosenEvent = event.target.value;
-                chosenArg = '';
+                subscriptionFormData.chosenEvent = event.target.value;
+                subscriptionFormData.chosenArg = '';
               }"
-              :invalid="$v.chosenEvent.$dirty && $v.chosenEvent.$invalid"
-              :disabled="chosenPanel ? false : true"
+              :invalid="$v.subscriptionFormData.chosenEvent.$dirty && $v.subscriptionFormData.chosenEvent.$invalid"
+              :disabled="subscriptionFormData.chosenPanel ? false : true"
             >
+              <span slot="label">Событие панели</span>
               <div
                 slot="item"
                 v-for="name in allEventsOfChosenPanel"
@@ -84,15 +84,15 @@
             class="FieldContainer"
           >
             <base-select
-              label="Аргумент события панели"
               size="big"
               required
               search
-              :value="chosenArg"
-              @input="(event) => {chosenArg = event.target.value;}"
-              :invalid="$v.chosenArg.$dirty && $v.chosenArg.$invalid"
-              :disabled="chosenEvent ? false : true"
+              :value="subscriptionFormData.chosenArg"
+              @input="(event) => {subscriptionFormData.chosenArg = event.target.value;}"
+              :invalid="$v.subscriptionFormData.chosenArg.$dirty && $v.subscriptionFormData.chosenArg.$invalid"
+              :disabled="subscriptionFormData.chosenEvent ? false : true"
             >
+              <span slot="label">Аргумент события панели</span>
               <div
                 slot="item"
                 v-for="(arg, index) in allArgumentsOfPanel"
@@ -109,18 +109,18 @@
 
           <div class="FieldContainer">
             <base-select
-              label="Панель"
               ref="actionSelect"
               size="big"
               required
               search
-              :value="chosenPanelWithActions"
+              :value="subscriptionFormData.chosenPanelWithActions"
               @input="(event) => {
-                chosenPanelWithActions = event.target.value;
-                chosenAction = '';
+                subscriptionFormData.chosenPanelWithActions = event.target.value;
+                subscriptionFormData.chosenAction = '';
               }"
-              :invalid="$v.chosenPanelWithActions.$dirty && $v.chosenPanelWithActions.$invalid"
+              :invalid="$v.subscriptionFormData.chosenPanelWithActions.$dirty && $v.subscriptionFormData.chosenPanelWithActions.$invalid"
             >
+              <span slot="label">Панель</span>
               <div
                 slot="item"
                 v-for="act in allPanelsWithActions"
@@ -133,17 +133,17 @@
 
           <div class="FieldContainer">
             <base-select
-              label="Действие"
               size="big"
               required
               search
-              :value="chosenAction"
+              :value="subscriptionFormData.chosenAction"
               @input="(event) => {
-                chosenAction = event.target.value;
+                subscriptionFormData.chosenAction = event.target.value;
               }"
-              :disabled="chosenPanelWithActions ? false : true"
-              :invalid="$v.chosenAction.$dirty && $v.chosenAction.$invalid"
+              :disabled="subscriptionFormData.chosenPanelWithActions ? false : true"
+              :invalid="$v.subscriptionFormData.chosenAction.$dirty && $v.subscriptionFormData.chosenAction.$invalid"
             >
+              <span slot="label">Действие</span>
               <div
                 slot="item"
                 v-for="name in allActionsOfChosenPanel"
@@ -174,7 +174,10 @@
           width="full"
           size="big"
           theme="theme_secondary"
-          @click="$emit('closeSubscriptionForm')"
+          @click="() => {
+            this.resetForm();
+            this.$emit('closeSubscriptionForm');
+          }"
         >Отменить</base-button>
       </div>
       <div class="BtnWrapper">
@@ -208,49 +211,52 @@ export default {
       eventSystem: this.$root.eventSystem,
       plugin: this.$root.pluginInstance,
 
-      subscriptionName: '',
-      
+      subscriptionFormData: this.currentSubscription
+        ? {
+          subscriptionName: '',
+          chosenPanel: this.currentSubscription.event.guid,
+          chosenEvent: this.currentSubscription.event.name,
+          chosenArg: this.currentSubscription.event.args,
+          chosenPanelWithActions: this.currentSubscription.action.guid,
+          chosenAction: this.currentSubscription.action.name,
+        }
+        : this.$root.subscriptionFormData,
+
       allPanelsWithEvents: [],
-      chosenPanel: this.currentSubscription ? this.currentSubscription.event.guid : '',
-
       allEventsOfChosenPanel: [],
-      chosenEvent: this.currentSubscription ? this.currentSubscription.event.name : '',
-
       allArgumentsOfPanel: [],
-      chosenArg: this.currentSubscription ? this.currentSubscription.event.args : '',
-
       allPanelsWithActions: [],
-      chosenPanelWithActions: this.currentSubscription ? this.currentSubscription.action.guid : '',
-
       allActionsOfChosenPanel: [],
-      chosenAction: this.currentSubscription ? this.currentSubscription.action.name : '',
     };
   },
   validations() {
     return {
-      subscriptionName: {
-        required,
-      },
-      chosenPanel: {
-        required,
-      },
-      chosenEvent: {
-        required,
-      },
-      chosenArg: {
-        required: requiredIf(() => {
-          return this.allArgumentsOfPanel.length;
-        }),
-      },
-      chosenPanelWithActions: {
-        required,
-      },
-      chosenAction: {
-        required,
-      },
+      subscriptionFormData: {
+        subscriptionName: {
+          required,
+        },
+        chosenPanel: {
+          required,
+        },
+        chosenEvent: {
+          required,
+        },
+        chosenArg: {
+          required: requiredIf(() => {
+            return this.allArgumentsOfPanel.length;
+          }),
+        },
+        chosenPanelWithActions: {
+          required,
+        },
+        chosenAction: {
+          required,
+        },
+      }
     };
   },
-  mounted() {
+  created() {
+    // Events
     const panelsGuidSet = new Set();
     this.eventSystem.events.forEach((event) => {
       panelsGuidSet.add(event.guid);
@@ -262,6 +268,10 @@ export default {
       });
     }
 
+    this.collectEventsOfChosenPanel();
+    this.collectArgsOfChosenEvent();
+
+    // Actions
     const panelsActionSet = new Set();
     this.eventSystem.actions.forEach((action) => {
       panelsActionSet.add(action.guid);
@@ -277,19 +287,21 @@ export default {
     this.allPanelsWithActions.push({
       guid: '-'
     });
+
+    this.collectActionsOfChosenPanel();
   },
   methods: {
     createSubscription() {
       let args = [];
       try {
-        args = JSON.parse(this.chosenArg);
+        args = JSON.parse(this.subscriptionFormData.chosenArg);
       } catch (error) {}
 
       this.eventSystem.subscribe(
-        this.chosenPanel,
-        this.chosenEvent,
-        this.chosenPanelWithActions,
-        this.chosenAction,
+        this.subscriptionFormData.chosenPanel,
+        this.subscriptionFormData.chosenEvent,
+        this.subscriptionFormData.chosenPanelWithActions,
+        this.subscriptionFormData.chosenAction,
         ...args
       );
 
@@ -329,18 +341,29 @@ export default {
 
       if (!this.$v.$invalid) {
         this.createSubscription();
+        this.resetForm();
         this.$emit('closeSubscriptionForm');
       }
     },
-  },
-  watch: {
-    chosenPanel(newValue) {
+
+    resetForm() {
+      this.$root.subscriptionFormData = {
+        subscriptionName: '',
+        chosenPanel: '',
+        chosenEvent: '',
+        chosenArg: '',
+        chosenPanelWithActions: '',
+        chosenAction: '',
+      };
+    },
+
+    collectEventsOfChosenPanel() {
       this.$root.logSystem.debug(`Start creation of array with all events of chosen panel.`);
 
       this.allEventsOfChosenPanel = [];
 
       this.eventSystem.events.forEach((event) => {
-        if (event.guid === newValue) {
+        if (event.guid === this.subscriptionFormData.chosenPanel) {
           this.allEventsOfChosenPanel.push(event.name);
         }
       });
@@ -348,14 +371,14 @@ export default {
       this.$root.logSystem.debug(`End creation of array with all events of chosen panel.`);
     },
 
-    chosenEvent(newValue) {
+    collectArgsOfChosenEvent() {
       this.$root.logSystem.debug(`Start creation of array with all arguments of panel.`);
 
       this.allArgumentsOfPanel = [];
 
       this.eventSystem.events.forEach((event) => {
         const isEqualGuid = event.guid === this.chosenPanel;
-        const isEqualEventName = event.name === newValue;
+        const isEqualEventName = event.name === this.subscriptionFormData.chosenEvent;
         const emptyArgs = event.args.length ? false : true;
         const resultCondition = isEqualGuid && isEqualEventName && !emptyArgs;
 
@@ -367,13 +390,13 @@ export default {
       this.$root.logSystem.debug(`End creation of array with all arguments of panel.`);
     },
 
-    chosenPanelWithActions(newValue) {
+    collectActionsOfChosenPanel() {
       this.$root.logSystem.debug(`Start creation of array with all actions of chosen panel.`);
 
       this.allActionsOfChosenPanel = [];
 
-      let chosenActionGuid = newValue;
-      if (newValue === '-') {
+      let chosenActionGuid = this.subscriptionFormData.chosenPanelWithActions;
+      if (chosenActionGuid === '-') {
         chosenActionGuid = undefined;
       }
 
@@ -385,6 +408,19 @@ export default {
 
       this.$root.logSystem.debug(`End creation of array with all actions of chosen panel.`);
     },
-  }
+  },
+  watch: {
+    'subscriptionFormData.chosenPanel': function() {
+      this.collectEventsOfChosenPanel();
+    },
+
+    'subscriptionFormData.chosenEvent': function() {
+      this.collectArgsOfChosenEvent();
+    },
+
+    'subscriptionFormData.chosenPanelWithActions': function() {
+      this.collectActionsOfChosenPanel();
+    },
+  },
 };
 </script>
