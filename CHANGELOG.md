@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - autoheight in textarea in ActionForm
 - plugin state API
 - ability to edit custom actions
+- ability to use `await` operator in custom actions
 
 ## [0.5.0]
 

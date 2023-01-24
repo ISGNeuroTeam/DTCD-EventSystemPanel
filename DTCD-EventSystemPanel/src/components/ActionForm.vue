@@ -193,7 +193,7 @@ export default {
       const { name, parameters, body } = this.actionFormData;
 
       const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
-      const callback = new Function(...parameters, body);
+      const callback = new AsyncFunction(...parameters, body);
 
       if (this.currentAction) {
         this.currentAction.callback = callback;
