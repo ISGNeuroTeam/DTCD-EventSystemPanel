@@ -29,7 +29,7 @@
       </div>
 
       <div class="FieldContainer type_params">
-        <base-input 
+        <base-input
           label="Имя параметра"
           size="big"
           :value="actionFormData.nameNewParam"
@@ -120,14 +120,12 @@ export default {
   data() {
     return {
       eventSystem: this.$root.eventSystem,
-      actionFormData: this.currentAction
-                      ? {
-                        name: this.currentAction.name,
-                        nameNewParam: '',
-                        parameters: [],
-                        body: this.currentAction.body,
-                      }
-                      : this.$root.actionFormData,
+      actionFormData: {
+        name: '',
+        nameNewParam: '',
+        parameters: [],
+        body: '',
+      },
     };
   },
   validations() {
@@ -137,6 +135,19 @@ export default {
         body: { required },
       }
     };
+  },
+  mounted() {
+    if (!this.currentAction) return;
+
+    const callback = this.currentAction.callback.toString().trim();
+
+    const argsOpeningBrace = callback.indexOf('(');
+    const argsClosingBrace = callback.indexOf(')');
+    const argsList = callback.substring(argsOpeningBrace + 1, argsClosingBrace).trim();
+
+    this.actionFormData.name = this.currentAction.name;
+    this.actionFormData.body = callback.replace(/^[^{]*{\s*/, '').replace(/\s*}[^}]*$/, '');
+    this.actionFormData.parameters = argsList.length > 0 ? argsList.split(',') : [];
   },
   methods: {
     handleCancelBtnClick() {
@@ -180,8 +191,18 @@ export default {
 
     saveCustomAction() {
       const { name, parameters, body } = this.actionFormData;
-      this.eventSystem.registerCustomAction(name, new Function(...parameters, body));
-      this.$root.logSystem.info(`Registered custom action.`);
+
+      const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+      const callback = new Function(...parameters, body);
+
+      if (this.currentAction) {
+        this.currentAction.callback = callback;
+        this.$root.logSystem.info(`Updated "${name}" custom action.`);
+      } else {
+        this.eventSystem.registerCustomAction(name, callback);
+        this.$root.logSystem.info(`Registered "${name}" custom action.`);
+      }
+
     },
 
     resetForm() {

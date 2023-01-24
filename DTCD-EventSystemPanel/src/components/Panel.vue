@@ -45,7 +45,7 @@
                       </tbody>
                     </table>
                   </div>
-                  <button 
+                  <button
                     class="ExpanderIconBtn"
                     type="button"
                     @click="(event) => {
@@ -118,7 +118,7 @@
                     </table>
                   </div>
                   <button
-                    v-if=" ! act.guid"
+                    v-if=" !act.guid"
                     class="ExpanderIconBtn"
                     type="button"
                     @click="(event) => {
@@ -128,8 +128,15 @@
                     }"
                   >
                     <span class="FontIcon name_trashFull size_lg"></span>
-                    <!-- pencil icon for edit -->
-                    <!-- <span class="FontIcon name_edit size_md"></span> -->
+                  </button>
+                  <button
+                    v-if="!act.guid"
+                    class="ExpanderIconBtn"
+                    type="button"
+                    style="margin-left: 8px"
+                    @click="editCustomAction(act)"
+                  >
+                    <span class="FontIcon name_edit size_lg"></span>
                   </button>
                 </div>
                 <table class="Table theme_alfa">
@@ -228,6 +235,11 @@ export default {
       );
 
       this.$root.logSystem.info(`Deleted subscription.`);
+    },
+
+    editCustomAction(action) {
+      this.chosenAction = action;
+      this.toggleWindow('Action_Form');
     },
   },
 };
