@@ -14,6 +14,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ability to edit custom actions
 - ability to use `await` operator in custom actions
 
+### Changed
+
+- the design of the panel
+
+### Removed
+
+- unnecessary component BtnBack
+
 ## [0.5.0]
 
 ### Removed

@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="handleFormSubmit" class="Wrapper">
+  <form @submit.prevent="handleFormSubmit" class="Wrapper type_inner">
     <div class="Header">
       <base-heading theme="theme_subheaderSmall">
         <h4>
@@ -10,15 +10,45 @@
           }}
         </h4>
       </base-heading>
+      <div class="BtnWrapper">
+        <base-button
+          theme="theme_secondary"
+          @click="$emit('closeActionForm')"
+        > Назад
+          <span slot="icon-left" class="Icon FontIcon name_chevronBigDown rotate_90 size_md "></span>
+        </base-button>
+
+        <base-button
+          v-if="currentSubscription"
+          theme="theme_red"
+          @click="deleteSubscription"
+        >
+          Удалить подписку
+        </base-button>
+
+        <base-icon-button
+          theme="theme_red"
+          @click="() => {
+            this.resetForm();
+            this.$emit('closeSubscriptionForm');
+          }"
+        >
+          <span class="FontIcon name_closeSmall size_lg"></span>
+        </base-icon-button>
+
+        <base-icon-button
+          @click="handleSubmitBtnClick"
+        >
+          <span class="FontIcon name_check size_lg"></span>
+        </base-icon-button>
+      </div>
     </div>
 
     <div class="Body">
-      <div class="BtnBackWrapper">
-        <BtnBack @click="$emit('closeActionForm')"/>
-      </div>
 
       <div class="FieldContainer">
         <base-input
+          class="Param"
           label="Название действия"
           required
           size="big"
@@ -26,23 +56,26 @@
           @input="(e) => (actionFormData.name = e.target.value)"
           :invalid="$v.actionFormData.name.$dirty && $v.actionFormData.name.$invalid"
         ></base-input>
-      </div>
 
-      <div class="FieldContainer type_params">
-        <base-input
-          label="Имя параметра"
-          size="big"
-          :value="actionFormData.nameNewParam"
-          @input="(e) => (actionFormData.nameNewParam = e.target.value)"
-        ></base-input>
-        <button
-          type="button"
-          class="ActionParamsAddBtn"
-          title="Добавить параметр функции"
-          @click="addNewParameter"
-        >
-          <span class="Icon FontIcon name_plusCircle size_xl"></span>
-        </button>
+        <div class="AddParam">
+          <base-input
+            class="Param type_full"
+            label="Имя параметра"
+            placeholder="test"
+            size="big"
+            :value="actionFormData.nameNewParam"
+            @input="(e) => (actionFormData.nameNewParam = e.target.value)"
+          >
+          </base-input>
+
+          <base-icon-button
+            class="ParamIcon"
+            theme="theme_primary"
+            @click="addNewParameter"
+          >
+            <span class="FontIcon name_plus size_lg"></span>
+          </base-icon-button>
+        </div>
       </div>
 
       <div class="ActionParams">
@@ -56,48 +89,17 @@
         >
       </div>
 
-      <div class="FieldContainer">
-        <base-textarea
-          label="Функция"
-          required
-          theme="resize_off"
-          placeholder="Тело JS-функции"
-          size="big"
-          :value="actionFormData.body"
-          @input="(e) => (actionFormData.body = e.target.value)"
-          :invalid="$v.actionFormData.body.$dirty && $v.actionFormData.body.$invalid"
-          data-autoheight
-        ></base-textarea>
-      </div>
-    </div>
-
-    <div class="Footer">
-      <div
-        v-if="currentAction"
-        class="BtnWrapper"
-      >
-        <base-button
-          width="full"
-          size="big"
-          theme="theme_red"
-          @click.prevent="handleDeleteBtnClick"
-        >Удалить действие</base-button>
-      </div>
-      <div class="BtnWrapper">
-        <base-button
-          width="full"
-          size="big"
-          theme="theme_secondary"
-          @click.prevent="handleCancelBtnClick"
-        >Отменить</base-button>
-      </div>
-      <div class="BtnWrapper">
-        <base-button
-          width="full"
-          size="big"
-          @click.prevent="handleSubmitBtnClick"
-        >Сохранить</base-button>
-      </div>
+      <base-textarea
+        label="Функция"
+        required
+        theme="resize_off"
+        placeholder="Тело JS-функции"
+        size="big"
+        :value="actionFormData.body"
+        @input="(e) => (actionFormData.body = e.target.value)"
+        :invalid="$v.actionFormData.body.$dirty && $v.actionFormData.body.$invalid"
+        data-autoheight
+      ></base-textarea>
     </div>
   </form>
 </template>
@@ -106,13 +108,8 @@
 import { validationMixin } from 'vuelidate';
 import { required } from '@vuelidate/validators/dist/raw.esm';
 
-import BtnBack from './BtnBack';
-
 export default {
   name: 'ActionForm',
-  components: {
-    BtnBack,
-  },
   mixins: [validationMixin],
   props: [
     'currentAction',

@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="handleFormSubmit" class="Wrapper">
+  <form @submit.prevent="handleFormSubmit" class="Wrapper type_inner">
     <div class="Header">
       <base-heading theme="theme_subheaderSmall">
         <h4>
@@ -10,16 +10,42 @@
           }}
         </h4>
       </base-heading>
+      <div class="BtnWrapper">
+        <base-button
+          theme="theme_secondary"
+          @click="$emit('closeSubscriptionForm')"
+        > Назад
+          <span slot="icon-left" class="Icon FontIcon name_chevronBigDown rotate_90 size_md "></span>
+        </base-button>
+
+        <base-button
+          v-if="currentAction"
+          theme="theme_red"
+          @click.prevent="handleDeleteBtnClick"
+        >
+          Удалить действие
+        </base-button>
+
+        <base-icon-button
+          theme="theme_red"
+          @click.prevent="handleCancelBtnClick"
+        >
+          <span class="FontIcon name_closeSmall size_lg"></span>
+        </base-icon-button>
+
+        <base-icon-button
+          @click.prevent="handleSubmitBtnClick"
+        >
+          <span class="FontIcon name_check size_lg"></span>
+        </base-icon-button>
+      </div>
     </div>
 
     <div class="Body">
-      <div class="BtnBackWrapper">
-        <BtnBack @click="$emit('closeSubscriptionForm')"/>
-      </div>
-
       <div class="FieldContainer type_alfa">
         <base-input 
           label="Название показателя"
+          class="Param type_full"
           required="true"
           size="big"
           @input="(event) => subscriptionFormData.subscriptionName = event.target.value"
@@ -34,6 +60,7 @@
 
           <div class="FieldContainer">
             <base-select
+              class="Param type_full"
               size="big"
               required
               search
@@ -44,19 +71,20 @@
               }"
               :invalid="$v.subscriptionFormData.chosenPanel.$dirty && $v.subscriptionFormData.chosenPanel.$invalid"
             >
-              <span slot="label">Панель</span>
+              <span slot="label">Плагин</span>
               <div
                 slot="item"
                 v-for="evt in allPanelsWithEvents"
                 :key="evt.guid"
                 :value="evt.guid"
                 :data-visible-value="evt.guid"
-              >{{ evt.guid || '-' }}</div>
+              >{{ evt.guid || 'Пользовательское событие' }}</div>
             </base-select>
           </div>
 
           <div class="FieldContainer">
             <base-select
+              class="Param type_full"
               size="big"
               required
               search
@@ -68,7 +96,7 @@
               :invalid="$v.subscriptionFormData.chosenEvent.$dirty && $v.subscriptionFormData.chosenEvent.$invalid"
               :disabled="subscriptionFormData.chosenPanel ? false : true"
             >
-              <span slot="label">Событие панели</span>
+              <span slot="label">Событие плагина</span>
               <div
                 slot="item"
                 v-for="name in allEventsOfChosenPanel"
@@ -84,6 +112,7 @@
             class="FieldContainer"
           >
             <base-select
+              class="Param type_full"
               size="big"
               required
               search
@@ -92,7 +121,7 @@
               :invalid="$v.subscriptionFormData.chosenArg.$dirty && $v.subscriptionFormData.chosenArg.$invalid"
               :disabled="subscriptionFormData.chosenEvent ? false : true"
             >
-              <span slot="label">Аргумент события панели</span>
+              <span slot="label">Аргумент события плагина</span>
               <div
                 slot="item"
                 v-for="(arg, index) in allArgumentsOfPanel"
@@ -106,9 +135,9 @@
 
         <div class="Column">
           <h5 class="Subtitle">Действия</h5>
-
           <div class="FieldContainer">
             <base-select
+              class="Param type_full"
               ref="actionSelect"
               size="big"
               required
@@ -120,19 +149,20 @@
               }"
               :invalid="$v.subscriptionFormData.chosenPanelWithActions.$dirty && $v.subscriptionFormData.chosenPanelWithActions.$invalid"
             >
-              <span slot="label">Панель</span>
+              <span slot="label">Плагин</span>
               <div
                 slot="item"
                 v-for="act in allPanelsWithActions"
                 :key="act.guid"
                 :value="act.guid"
                 :data-visible-value="act.guid"
-              >{{ act.guid || '-' }}</div>
+              >{{ act.guid || 'Пользовательское событие' }}</div>
             </base-select>
           </div>
 
           <div class="FieldContainer">
             <base-select
+              class="Param type_full"
               size="big"
               required
               search
@@ -143,7 +173,7 @@
               :disabled="subscriptionFormData.chosenPanelWithActions ? false : true"
               :invalid="$v.subscriptionFormData.chosenAction.$dirty && $v.subscriptionFormData.chosenAction.$invalid"
             >
-              <span slot="label">Действие</span>
+              <span slot="label">Действие плагина</span>
               <div
                 slot="item"
                 v-for="name in allActionsOfChosenPanel"
@@ -156,38 +186,6 @@
         </div>
       </div>
     </div>
-
-    <div class="Footer">
-      <div
-        v-if="currentSubscription"
-        class="BtnWrapper"
-      >
-        <base-button
-          width="full"
-          size="big"
-          theme="theme_red"
-          @click="deleteSubscription"
-        >Удалить подписку</base-button>
-      </div>
-      <div class="BtnWrapper">
-        <base-button
-          width="full"
-          size="big"
-          theme="theme_secondary"
-          @click="() => {
-            this.resetForm();
-            this.$emit('closeSubscriptionForm');
-          }"
-        >Отменить</base-button>
-      </div>
-      <div class="BtnWrapper">
-        <base-button
-          width="full"
-          size="big"
-          @click="handleSubmitBtnClick"
-        >Сохранить</base-button>
-      </div>
-    </div>
   </form>
 </template>
 
@@ -195,13 +193,8 @@
 import { validationMixin } from 'vuelidate';
 import { required, requiredIf } from '@vuelidate/validators/dist/raw.esm';
 
-import BtnBack from './BtnBack';
-
 export default {
   name: 'SubscriptionForm',
-  components: {
-    BtnBack,
-  },
   mixins: [validationMixin],
   props: [
     'currentSubscription',
@@ -284,9 +277,9 @@ export default {
     }
 
     // custom actions
-    this.allPanelsWithActions.push({
-      guid: '-'
-    });
+    // this.allPanelsWithActions.push({
+    //   guid: 'Пользовательское событие'
+    // });
 
     this.collectActionsOfChosenPanel();
   },
@@ -396,7 +389,7 @@ export default {
       this.allActionsOfChosenPanel = [];
 
       let chosenActionGuid = this.subscriptionFormData.chosenPanelWithActions;
-      if (chosenActionGuid === '-') {
+      if (chosenActionGuid === 'Пользовательское событие') {
         chosenActionGuid = undefined;
       }
 
