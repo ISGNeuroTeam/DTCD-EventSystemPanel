@@ -1,22 +1,25 @@
 <template>
-  <form @submit.prevent="handleFormSubmit" class="Wrapper type_inner">
+  <form @submit.prevent="handleFormSubmit" class="Wrapper">
     <div class="Header">
-      <base-heading theme="theme_subheaderSmall">
-        <h4>
-          {{
-            currentAction
-              ? 'Редактировать действие'
-              : 'Создание нового действия'
-          }}
-        </h4>
-      </base-heading>
+      <h4 class="mainTitle">
+        {{
+          currentAction
+            ? 'Редактировать действие'
+            : 'Создание нового действия'
+        }}
+      </h4>
       <div class="BtnWrapper">
-        <base-button
-          theme="theme_secondary"
-          @click="$emit('closeActionForm')"
-        > Назад
-          <span slot="icon-left" class="Icon FontIcon name_chevronBigDown rotate_90 size_md "></span>
-        </base-button>
+        <base-tooltip 
+          content="Вернуться к действиям" 
+          placement="bottom"
+        >
+          <base-button
+            theme="theme_secondary"
+            @click="$emit('closeActionForm')"
+          > Назад
+            <span slot="icon-left" class="Icon FontIcon name_chevronBigDown rotate_90 size_md "></span>
+          </base-button>
+        </base-tooltip>
 
         <base-button
           v-if="currentSubscription"
@@ -26,21 +29,31 @@
           Удалить подписку
         </base-button>
 
-        <base-icon-button
-          theme="theme_red"
-          @click="() => {
-            this.resetForm();
-            this.$emit('closeSubscriptionForm');
-          }"
+        <base-tooltip 
+          content="Отменить" 
+          placement="bottom"
         >
-          <span class="FontIcon name_closeSmall size_lg"></span>
-        </base-icon-button>
+          <base-icon-button
+            theme="theme_red"
+            @click="() => {
+              this.resetForm();
+              this.$emit('closeSubscriptionForm');
+            }"
+          >
+            <span class="FontIcon name_closeSmall size_lg"></span>
+          </base-icon-button>
+        </base-tooltip>
 
-        <base-icon-button
-          @click="handleSubmitBtnClick"
+        <base-tooltip 
+          content="Сохранить" 
+          placement="bottom"
         >
-          <span class="FontIcon name_check size_lg"></span>
-        </base-icon-button>
+          <base-icon-button
+            @click="handleSubmitBtnClick"
+          >
+            <span class="FontIcon name_check size_lg"></span>
+          </base-icon-button>
+        </base-tooltip>
       </div>
     </div>
 
@@ -61,20 +74,24 @@
           <base-input
             class="Param type_full"
             label="Имя параметра"
-            placeholder="test"
             size="big"
             :value="actionFormData.nameNewParam"
             @input="(e) => (actionFormData.nameNewParam = e.target.value)"
           >
           </base-input>
 
-          <base-icon-button
-            class="ParamIcon"
-            theme="theme_primary"
-            @click="addNewParameter"
+          <base-tooltip 
+            class="ParamIconWrapper" 
+            content="Добавить параметр" 
+            placement="top"
           >
-            <span class="FontIcon name_plus size_lg"></span>
-          </base-icon-button>
+            <base-icon-button
+              theme="theme_primary"
+              @click="addNewParameter"
+            >
+              <span class="FontIcon name_plus size_lg"></span>
+            </base-icon-button>
+          </base-tooltip>
         </div>
       </div>
 

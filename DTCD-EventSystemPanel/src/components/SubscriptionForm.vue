@@ -1,22 +1,25 @@
 <template>
-  <form @submit.prevent="handleFormSubmit" class="Wrapper type_inner">
+  <form @submit.prevent="handleFormSubmit" class="Wrapper">
     <div class="Header">
-      <base-heading theme="theme_subheaderSmall">
-        <h4>
-          {{
-            currentSubscription
-              ? 'Изменить подписку'
-              : 'Создать новую подписку'
-          }}
-        </h4>
-      </base-heading>
+      <h4 class="mainTitle">
+        {{
+          currentSubscription
+            ? 'Изменить подписку'
+            : 'Создать новую подписку'
+        }}
+      </h4>
       <div class="BtnWrapper">
-        <base-button
-          theme="theme_secondary"
-          @click="$emit('closeSubscriptionForm')"
-        > Назад
-          <span slot="icon-left" class="Icon FontIcon name_chevronBigDown rotate_90 size_md "></span>
-        </base-button>
+        <base-tooltip 
+          content="Вернуться к подпискам" 
+          placement="bottom"
+        >
+          <base-button
+            theme="theme_secondary"
+            @click="$emit('closeSubscriptionForm')"
+          > Назад
+            <span slot="icon-left" class="Icon FontIcon name_chevronBigDown rotate_90 size_md "></span>
+          </base-button>
+        </base-tooltip>
 
         <base-button
           v-if="currentAction"
@@ -26,18 +29,28 @@
           Удалить действие
         </base-button>
 
-        <base-icon-button
-          theme="theme_red"
-          @click.prevent="handleCancelBtnClick"
+        <base-tooltip 
+          content="Отменить"
+          placement="bottom"
         >
-          <span class="FontIcon name_closeSmall size_lg"></span>
-        </base-icon-button>
+          <base-icon-button
+            theme="theme_red"
+            @click.prevent="handleCancelBtnClick"
+          >
+            <span class="FontIcon name_closeSmall size_lg"></span>
+          </base-icon-button>
+        </base-tooltip>
 
-        <base-icon-button
-          @click.prevent="handleSubmitBtnClick"
+        <base-tooltip 
+          content="Сохранить" 
+          placement="bottom"
         >
-          <span class="FontIcon name_check size_lg"></span>
-        </base-icon-button>
+          <base-icon-button
+            @click.prevent="handleSubmitBtnClick"
+          >
+            <span class="FontIcon name_check size_lg"></span>
+          </base-icon-button>
+        </base-tooltip>
       </div>
     </div>
 

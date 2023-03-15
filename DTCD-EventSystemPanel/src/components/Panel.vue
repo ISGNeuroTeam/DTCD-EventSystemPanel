@@ -4,6 +4,15 @@
       class="Wrapper"
       :style="{display: $root.typeVisibleWindow === 'Main' ? '' : 'none'}"
     >
+      <div 
+        class="Header" 
+        v-if="config.isTitleVisible"
+      >
+        <base-heading theme="theme_subheaderSmall">
+          <h4>EventSystemPanel</h4>
+        </base-heading>
+      </div>
+      
       <base-tabs 
         class="TabContainer" 
         @select="tabSelectHandler"
@@ -194,6 +203,9 @@ export default {
       chosenAction: null,
       chosenSubscription: null,
       selectedTab: 0,
+      config: {
+        isTitleVisible: true,
+      },  
     };
   },
   mounted() {
@@ -201,6 +213,10 @@ export default {
     this.actions = this.eventSystem.actions;
   },
   methods: {
+    setIsTitleVisible(value = '') {
+      this.config.isTitleVisible = value;
+    },
+
     tabSelectHandler(event) {
       const { tabIndex } = event.target.activeTab;
       this.selectedTab = tabIndex;
