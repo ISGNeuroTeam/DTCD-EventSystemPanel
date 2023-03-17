@@ -8,9 +8,9 @@
         class="Header" 
         v-if="config.isTitleVisible"
       >
-        <base-heading theme="theme_subheaderSmall">
-          <h4>EventSystemPanel</h4>
-        </base-heading>
+        <h4 class="mainTitle">
+          Панель системы событий и действий
+        </h4>
       </div>
       
       <base-tabs 
