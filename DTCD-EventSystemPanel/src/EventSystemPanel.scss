@@ -4,6 +4,8 @@
   font-size: 17px;
   line-height: 1.21;
   color: var(--text_main);
+  display: flex;
+  flex-direction: column;
   height: 100%;
 
   &,
@@ -17,33 +19,64 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    overflow-x: hidden;
     overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .TabContainer {
+    padding: 10px 10px 0;
+  }
+
+  .PanelList {
+    padding: 0 4px;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .Header,
-  .Body,
-  .Footer {
-    padding: 10px;
+  .Body {
+    padding: 10px 0;
   }
 
   .Header {
     flex: 0 0 auto;
-    min-height: 50px;
-    border-bottom: 4px solid var(--background_secondary);
+    border-bottom: 1px solid var(--border_secondary);
     background-color: var(--background_main);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 10px;
+  }
+
+  .mainTitle {
+    font-weight: 600;
+    margin: 0;
   }
 
   .Body {
     flex: 1 0 auto;
     background-color: var(--background_main);
+    padding: 10px;
   }
 
   .TabTopBtnWrapper {
     display: flex;
-    justify-content: center;
-    margin-top: 12px;
-    margin-bottom: 22px;
+    justify-content: space-between;
+    padding: 0 10px 10px;
+    border-bottom: 1px solid var(--border_secondary);
+    background-color: var(--background_main);
+  }
+
+  .SearchSubscribe {
+    width: 50%;
+    padding-right: 10px;
+
+    .FontIcon {
+      color: var(--text_main);
+    }
   }
 
   .Subtitle {
@@ -52,40 +85,36 @@
     margin-bottom: 10px;
   }
 
-  .BtnBackWrapper,
   .FieldContainer {
+    display: flex; 
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
     padding-bottom: 10px;
 
     &.type_alfa {
       padding-bottom: 20px;
     }
-  }
 
-  .FieldContainer {
-    &.type_params {
-      display: flex;
-      align-items: flex-end;
-      column-gap: 20px;
+    .Param {
+      width: 50%;
 
-      base-input {
+      &.type_full {
         width: 100%;
       }
     }
   }
 
-  .ActionParamsAddBtn {
-    flex: none;
-    padding: 0;
-    background: none;
-    border: none;
-    width: 34px;
-    height: 34px;
-    cursor: pointer;
+  .AddParam {
+    display: flex;
+    align-items: flex-end;
+    column-gap: 10px;
+    width: 50%; 
 
-    .Icon {
-      width: 100%;
-      height: 100%;
-    }
+    .ParamIconWrapper {
+      align-self: end;
+      padding-bottom: 3px;
+    }  
   }
 
   .ActionParams {
@@ -105,10 +134,8 @@
     border: none;
     cursor: pointer;
     flex: none;
-
-    * {
-      fill: var(--button_primary);
-    }
+    gap: 5px;
+    color: var(--text_main);
   }
 
   .ExpanderSummaryContent {
@@ -167,20 +194,9 @@
     }
   }
 
-  .Footer {
-    flex: 0 0 auto;
+  .BtnWrapper {
     display: flex;
-    flex-wrap: wrap;
-    row-gap: 6px;
-    margin: 0 -3px;
-    border-top: 4px solid var(--background_secondary);
-    background-color: var(--background_main);
-
-    .BtnWrapper {
-      min-width: 33.33333333%;
-      flex: 1 1 auto;
-      padding: 0 3px;
-    }
+    gap: 5px;
   }
 
   .FontIcon {

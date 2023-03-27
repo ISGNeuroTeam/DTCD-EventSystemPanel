@@ -15,6 +15,10 @@ export class EventSystemPanel extends PanelPlugin {
   #eventSystem;
   #styleSystem;
 
+  #config = {
+    isTitleVisible: true,
+  };
+
   static getRegistrationMeta() {
     return {
       version,
@@ -32,8 +36,8 @@ export class EventSystemPanel extends PanelPlugin {
     this.#styleSystem = new StyleSystemAdapter('0.4.0');
     const logSystem = new LogSystemAdapter('0.7.0', guid, EventSystemPanel.getRegistrationMeta().name);
 
-    const VueJS = this.getDependence('Vue');
-    this.#vueComponent = new VueJS.default({
+    const { default: VueJS } = this.getDependence('Vue');
+    const view = new VueJS({
       data: () => {
         return {
           eventSystem: this.#eventSystem,
@@ -63,6 +67,54 @@ export class EventSystemPanel extends PanelPlugin {
       },
       render: h => h(Panel),
     }).$mount(selector);
+
+    this.#vueComponent = view.$children[0];
+  }
+
+  setVueComponentPropValue(prop, value) {
+    const methodName = `set${prop.charAt(0).toUpperCase() + prop.slice(1)}`;
+    if (this.#vueComponent[methodName]) {
+      this.#vueComponent[methodName](value)
+    } else {
+      throw new Error(`В компоненте отсутствует метод ${methodName} для присвоения свойства ${prop}`)
+    }
+  }
+
+  setPluginConfig(config = {}) {
+    const configProps = Object.keys(this.#config);
+
+    for (const [prop, value] of Object.entries(config)) {
+      if (!configProps.includes(prop)) continue;
+      this.setVueComponentPropValue(prop, value)
+
+      this.#config[prop] = value;
+    }
+  }
+
+  getPluginConfig() {
+    return { ...this.#config };
+  }
+
+  setFormSettings(config) {
+    return this.setPluginConfig(config);
+  }
+
+  getFormSettings() {
+    return {
+      fields: [
+        {
+          component: 'title',
+          propValue: 'Общие настройки',
+        },
+        {
+          component: 'switch',
+          propName: 'isTitleVisible',
+          attrs: {
+            label: 'Скрыть/отобразить название панели',
+          },
+        },
+      ],
+    };
   }
 
   getState() {
