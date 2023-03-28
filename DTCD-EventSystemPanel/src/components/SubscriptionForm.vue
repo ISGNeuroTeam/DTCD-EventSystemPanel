@@ -214,12 +214,9 @@ export default {
   ],
   data() {
     return {
-      eventSystem: this.$root.eventSystem,
-      plugin: this.$root.pluginInstance,
-
       subscriptionFormData: this.currentSubscription
         ? {
-          subscriptionName: '',
+          subscriptionName: this.currentSubscription.subscriptionName,
           chosenPanel: this.currentSubscription.event.guid,
           chosenEvent: this.currentSubscription.event.name,
           chosenArg: this.currentSubscription.event.args,
@@ -264,7 +261,7 @@ export default {
   created() {
     // Events
     const panelsGuidSet = new Set();
-    this.eventSystem.events.forEach((event) => {
+    this.$root.eventSystem.events.forEach((event) => {
       panelsGuidSet.add(event.guid);
     });
 
@@ -279,7 +276,7 @@ export default {
 
     // Actions
     const panelsActionSet = new Set();
-    this.eventSystem.actions.forEach((action) => {
+    this.$root.eventSystem.actions.forEach((action) => {
       panelsActionSet.add(action.guid);
     });
 
@@ -303,11 +300,14 @@ export default {
         args = JSON.parse(this.subscriptionFormData.chosenArg);
       } catch (error) {}
 
-      this.eventSystem.subscribe(
-        this.subscriptionFormData.chosenPanel,
-        this.subscriptionFormData.chosenEvent,
-        this.subscriptionFormData.chosenPanelWithActions,
-        this.subscriptionFormData.chosenAction,
+      this.$root.eventSystem.subscribe(
+        {
+          subscriptionName: this.subscriptionFormData.subscriptionName,
+          eventGUID: this.subscriptionFormData.chosenPanel,
+          eventName: this.subscriptionFormData.chosenEvent,
+          actionGUID: this.subscriptionFormData.chosenPanelWithActions,
+          actionName: this.subscriptionFormData.chosenAction,
+        },
         ...args
       );
 
@@ -324,7 +324,7 @@ export default {
         action: { guid: actionGUID, name: actionName },
       } = this.currentSubscription;
 
-      this.eventSystem.unsubscribe(
+      this.$root.eventSystem.unsubscribe(
         eventGUID,
         eventName,
         actionGUID,
@@ -368,7 +368,7 @@ export default {
 
       this.allEventsOfChosenPanel = [];
 
-      this.eventSystem.events.forEach((event) => {
+      this.$root.eventSystem.events.forEach((event) => {
         if (event.guid === this.subscriptionFormData.chosenPanel) {
           this.allEventsOfChosenPanel.push(event.name);
         }
@@ -382,7 +382,7 @@ export default {
 
       this.allArgumentsOfPanel = [];
 
-      this.eventSystem.events.forEach((event) => {
+      this.$root.eventSystem.events.forEach((event) => {
         const isEqualGuid = event.guid === this.chosenPanel;
         const isEqualEventName = event.name === this.subscriptionFormData.chosenEvent;
         const emptyArgs = event.args.length ? false : true;
@@ -406,7 +406,7 @@ export default {
         chosenActionGuid = undefined;
       }
 
-      this.eventSystem.actions.forEach((action) => {
+      this.$root.eventSystem.actions.forEach((action) => {
         if (action.guid === chosenActionGuid) {
           this.allActionsOfChosenPanel.push(action.name);
         }

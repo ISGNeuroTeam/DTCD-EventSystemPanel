@@ -2,7 +2,7 @@
   <div class="EventSystemPanel">
     <div
       class="Wrapper"
-      :style="{display: $root.typeVisibleWindow === 'Main' ? '' : 'none'}"
+      v-show="$root.typeVisibleWindow === 'Main'"
     >
       <div 
         class="Header" 
@@ -69,7 +69,7 @@
                   <tbody>
                     <tr>
                       <td class="Column type_first">Название:</td>
-                      <td class="Column type_second">-</td>
+                      <td class="Column type_second">{{sub.subscriptionName || '-'}}</td>
                     </tr>
                   </tbody>
                 </table>
