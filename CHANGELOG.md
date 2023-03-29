@@ -18,10 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - the design of the panel
+- was downgrade versions of vuelidate libs
 
 ### Removed
 
 - unnecessary component BtnBack
+- "^" in package.json for some packages
 
 ## [0.5.0]
 
