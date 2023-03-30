@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ability to edit custom actions
 - ability to use `await` operator in custom actions
 - hiding of panel title from component settings
+- displaying of subscription name
+- hiding of system subscriptions from list
 
 ### Changed
 

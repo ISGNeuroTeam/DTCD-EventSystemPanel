@@ -2,7 +2,7 @@
   <div class="EventSystemPanel">
     <div
       class="Wrapper"
-      :style="{display: $root.typeVisibleWindow === 'Main' ? '' : 'none'}"
+      v-show="$root.typeVisibleWindow === 'Main'"
     >
       <div 
         class="Header" 
@@ -57,62 +57,65 @@
 
       <div class="PanelList" v-if="selectedTab === 0">
         <base-expander-group>
-          <base-expander
-            slot="item"
-            theme="with_borderBottom"
-            v-for="(sub, index) in subscriptions"
-            :key="index"
-          >
-            <div slot="summary" class="ExpanderSummaryContent">
-              <div>
-                <table class="Table theme_alfa">
-                  <tbody>
-                    <tr>
-                      <td class="Column type_first">Название:</td>
-                      <td class="Column type_second">-</td>
-                    </tr>
-                  </tbody>
-                </table>
+          <template v-for="(sub, index) in subscriptions">
+            <base-expander
+              slot="item"
+              theme="with_borderBottom"
+              :key="index"
+              v-if="sub.subscriptionType !== 'system'"
+            >
+              <div slot="summary" class="ExpanderSummaryContent">
+                <div>
+                  <table class="Table theme_alfa">
+                    <tbody>
+                      <tr>
+                        <td class="Column type_first">Название:</td>
+                        <td class="Column type_second">{{sub.subscriptionName || '-'}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <button
+                  class="ExpanderIconBtn"
+                  type="button"
+                  @click="(event) => {
+                    deleteSubscription(sub);
+                    // chosenSubscription = sub;
+                    // toggleWindow('Subscription_Form');
+                  }"
+                  v-if="sub.subscriptionType !== 'system'"
+                >
+                  <span class="FontIcon name_trashFull size_md"></span>
+                  <!-- pencil icon for edit -->
+                  <!-- <span class="FontIcon name_edit size_md"></span> -->
+                </button>
               </div>
-              <button
-                class="ExpanderIconBtn"
-                type="button"
-                @click="(event) => {
-                  deleteSubscription(sub);
-                  // chosenSubscription = sub;
-                  // toggleWindow('Subscription_Form');
-                }"
-              >
-                <span class="FontIcon name_trashFull size_md"></span>
-                <!-- pencil icon for edit -->
-                <!-- <span class="FontIcon name_edit size_md"></span> -->
-              </button>
-            </div>
-            <table class="Table theme_alfa">
-              <tbody>
-                <tr>
-                  <td class="Column type_first">Событие:</td>
-                  <td class="Column type_second">
-                    <div>{{sub.event.name}}</div>
-                    <div>{{sub.event.guid}}</div>
-                  </td>
-                </tr>
-                <tr v-if="sub.event.args.length">
-                  <td class="Column type_first">Аргументы:</td>
-                  <td class="Column type_second">
-                    <pre>{{JSON.stringify(sub.event.args)}}</pre>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="Column type_first">Действие:</td>
-                  <td class="Column type_second">
-                    <div>{{sub.action.name}}</div>
-                    <div>{{sub.action.guid}}</div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </base-expander>
+              <table class="Table theme_alfa">
+                <tbody>
+                  <tr>
+                    <td class="Column type_first">Событие:</td>
+                    <td class="Column type_second">
+                      <div>{{sub.event.name}}</div>
+                      <div>{{sub.event.guid}}</div>
+                    </td>
+                  </tr>
+                  <tr v-if="sub.event.args.length">
+                    <td class="Column type_first">Аргументы:</td>
+                    <td class="Column type_second">
+                      <pre>{{JSON.stringify(sub.event.args)}}</pre>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="Column type_first">Действие:</td>
+                    <td class="Column type_second">
+                      <div>{{sub.action.name}}</div>
+                      <div>{{sub.action.guid}}</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </base-expander>
+          </template>
         </base-expander-group>
       </div>
 
