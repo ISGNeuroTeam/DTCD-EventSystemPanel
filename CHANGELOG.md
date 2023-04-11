@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - the design of the panel
 - was downgrade versions of vuelidate libs
-- textarea size
+- textarea size for correct content editing
 
 ### Removed
 
