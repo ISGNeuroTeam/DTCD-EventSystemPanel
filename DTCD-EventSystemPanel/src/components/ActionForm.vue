@@ -109,13 +109,11 @@
       <base-textarea
         label="Функция"
         required
-        theme="resize_off"
         placeholder="Тело JS-функции"
         size="big"
         :value="actionFormData.body"
         @input="(e) => (actionFormData.body = e.target.value)"
         :invalid="$v.actionFormData.body.$dirty && $v.actionFormData.body.$invalid"
-        data-autoheight
       ></base-textarea>
     </div>
   </form>
