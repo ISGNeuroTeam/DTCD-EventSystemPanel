@@ -77,6 +77,7 @@
             size="big"
             :value="actionFormData.nameNewParam"
             @input="(e) => (actionFormData.nameNewParam = e.target.value)"
+            :invalid="$v.actionFormData.nameNewParam.$params.correctParamName"
           >
           </base-input>
 
@@ -145,6 +146,11 @@ export default {
       actionFormData: {
         name: { required },
         body: { required },
+        nameNewParam: {
+          correctParamName: (value) => {
+            return false;
+          },
+        },
       }
     };
   },
