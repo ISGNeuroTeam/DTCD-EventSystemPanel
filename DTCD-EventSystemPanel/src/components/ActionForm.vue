@@ -9,8 +9,8 @@
         }}
       </h4>
       <div class="BtnWrapper">
-        <base-tooltip 
-          content="Вернуться к действиям" 
+        <base-tooltip
+          content="Вернуться к действиям"
           placement="bottom"
         >
           <base-button
@@ -29,23 +29,20 @@
           Удалить подписку
         </base-button>
 
-        <base-tooltip 
-          content="Отменить" 
+        <base-tooltip
+          content="Отменить"
           placement="bottom"
         >
           <base-icon-button
             theme="theme_red"
-            @click="() => {
-              this.resetForm();
-              this.$emit('closeSubscriptionForm');
-            }"
+            @click="handleCancelBtnClick"
           >
             <span class="FontIcon name_closeSmall size_lg"></span>
           </base-icon-button>
         </base-tooltip>
 
-        <base-tooltip 
-          content="Сохранить" 
+        <base-tooltip
+          content="Сохранить"
           placement="bottom"
         >
           <base-icon-button
@@ -80,9 +77,9 @@
           >
           </base-input>
 
-          <base-tooltip 
-            class="ParamIconWrapper" 
-            content="Добавить параметр" 
+          <base-tooltip
+            class="ParamIconWrapper"
+            content="Добавить параметр"
             placement="top"
           >
             <base-icon-button
