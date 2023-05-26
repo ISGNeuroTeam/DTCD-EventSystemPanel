@@ -11,9 +11,13 @@ import Panel from './components/Panel.vue';
 
 export class EventSystemPanel extends PanelPlugin {
   #guid;
-  #component
+  #vueComponent;
   #eventSystem;
   #styleSystem;
+
+  #config = {
+    isTitleVisible: true,
+  };
 
   static getRegistrationMeta() {
     return {
@@ -27,28 +31,114 @@ export class EventSystemPanel extends PanelPlugin {
 
   constructor(guid, selector) {
     super();
-    this.#guid = guid
+    this.#guid = guid;
     this.#eventSystem = new EventSystemAdapter('0.4.0', guid);
     this.#styleSystem = new StyleSystemAdapter('0.4.0');
     const logSystem = new LogSystemAdapter('0.7.0', guid, EventSystemPanel.getRegistrationMeta().name);
 
-    const VueJS = this.getDependence('Vue');
-    this.#component = new VueJS.default({
+    const { default: VueJS } = this.getDependence('Vue');
+    const view = new VueJS({
       data: () => {
         return {
           eventSystem: this.#eventSystem,
           styleSystem: this.#styleSystem,
           logSystem,
           pluginInstance: this,
-          guid
-        }
+          guid,
+
+          typeVisibleWindow: 'Main',
+          indexActiveTab: 0,
+
+          actionFormData: {
+            name: '',
+            nameNewParam: '',
+            parameters: [],
+            body: '',
+          },
+          subscriptionFormData: {
+            subscriptionName: '',
+            chosenPanel: '',
+            chosenEvent: '',
+            chosenArg: '',
+            chosenPanelWithActions: '',
+            chosenAction: '',
+          },
+        };
       },
       render: h => h(Panel),
     }).$mount(selector);
 
-    this.render()
+    this.#vueComponent = view.$children[0];
   }
 
-  render() {
+  setVueComponentPropValue(prop, value) {
+    const methodName = `set${prop.charAt(0).toUpperCase() + prop.slice(1)}`;
+    if (this.#vueComponent[methodName]) {
+      this.#vueComponent[methodName](value)
+    } else {
+      throw new Error(`В компоненте отсутствует метод ${methodName} для присвоения свойства ${prop}`)
+    }
+  }
+
+  setPluginConfig(config = {}) {
+    const configProps = Object.keys(this.#config);
+
+    for (const [prop, value] of Object.entries(config)) {
+      if (!configProps.includes(prop)) continue;
+      this.setVueComponentPropValue(prop, value)
+
+      this.#config[prop] = value;
+    }
+  }
+
+  getPluginConfig() {
+    return { ...this.#config };
+  }
+
+  setFormSettings(config) {
+    return this.setPluginConfig(config);
+  }
+
+  getFormSettings() {
+    return {
+      fields: [
+        {
+          component: 'title',
+          propValue: 'Общие настройки',
+        },
+        {
+          component: 'switch',
+          propName: 'isTitleVisible',
+          attrs: {
+            label: 'Скрыть/отобразить название панели',
+          },
+        },
+      ],
+    };
+  }
+
+  getState() {
+    return {
+      typeVisibleWindow: this.#vueComponent.typeVisibleWindow,
+      indexActiveTab: this.#vueComponent.indexActiveTab,
+      actionFormData: this.#vueComponent.actionFormData,
+      subscriptionFormData: this.#vueComponent.subscriptionFormData,
+    };
+  }
+
+  setState(newState) {
+    if (typeof newState !== 'object' ) return;
+
+    const vueNamesFields = [
+      'typeVisibleWindow',
+      'indexActiveTab',
+      'actionFormData',
+      'subscriptionFormData',
+    ];
+
+    for (const [prop, value] of Object.entries(newState)) {
+      if (!vueNamesFields.includes(prop)) continue;
+      this.#vueComponent[prop] = value;
+    }
   }
 }

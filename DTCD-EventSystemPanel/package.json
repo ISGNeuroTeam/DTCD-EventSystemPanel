@@ -1,6 +1,6 @@
 {
   "name": "dtcd-event-system-panel",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "scripts": {
     "test": "jest",
     "dev": "rollup -cw",
@@ -8,31 +8,31 @@
   },
   "devDependencies": {
     "@babel/core": "7.13.14",
-    "@babel/plugin-proposal-class-properties": "^7.16.0",
-    "@babel/plugin-proposal-private-methods": "^7.16.0",
-    "@babel/preset-env": "^7.16.5",
-    "@rollup/plugin-babel": "^5.3.0",
-    "@rollup/plugin-commonjs": "^19.0.0",
-    "@rollup/plugin-json": "^4.1.0",
+    "@babel/plugin-proposal-class-properties": "7.18.6",
+    "@babel/plugin-proposal-private-methods": "7.18.6",
+    "@babel/preset-env": "7.20.2",
+    "@rollup/plugin-babel": "5.3.1",
+    "@rollup/plugin-commonjs": "19.0.2",
+    "@rollup/plugin-json": "4.1.0",
     "@rollup/plugin-node-resolve": "11.2.1",
     "@rollup/plugin-replace": "2.4.2",
-    "@rollup/plugin-url": "^6.1.0",
+    "@rollup/plugin-url": "6.1.0",
     "@types/jest": "26.0.22",
     "@vue/composition-api": "1.7.1",
-    "@vuelidate/core": "^2.0.0-alpha.44",
-    "@vuelidate/validators": "^2.0.0-alpha.31",
+    "@vuelidate/core": "2.0.0",
+    "@vuelidate/validators": "2.0.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "26.6.3",
     "commonjs": "0.0.1",
     "jest": "26.6.3",
     "rollup": "2.44.0",
     "rollup-plugin-styles": "3.14.1",
-    "rollup-plugin-vue": "^5.0.0",
+    "rollup-plugin-vue": "5.1.9",
     "sass": "1.32.8",
     "vue": "2.6.14",
     "vue-template-compiler": "2.6.14"
   },
   "dependencies": {
-    "vuelidate": "^0.7.7"
+    "vuelidate": "0.7.7"
   }
 }
