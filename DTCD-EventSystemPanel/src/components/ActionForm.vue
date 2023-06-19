@@ -186,7 +186,7 @@ export default {
       this.$v.actionFormData.name.$touch();
       this.$v.actionFormData.body.$touch();
 
-      if (!this.$v.$invalid) {
+      if (!this.$v.actionFormData.name.$invalid && !this.$v.actionFormData.body.$invalid) {
         this.saveCustomAction();
         this.handleCancelBtnClick();
       }
