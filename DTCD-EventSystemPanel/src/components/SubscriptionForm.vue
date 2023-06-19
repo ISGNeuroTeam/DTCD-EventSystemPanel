@@ -61,7 +61,7 @@
           class="Param type_full"
           required="true"
           size="big"
-          @input="(event) => subscriptionFormData.subscriptionName = event.target.value"
+          @input="subscriptionFormData.subscriptionName = $event.target.value"
           :value="subscriptionFormData.subscriptionName"
           :invalid="$v.subscriptionFormData.subscriptionName.$error"
         ></base-input>
@@ -130,7 +130,7 @@
               required
               search
               :value="subscriptionFormData.chosenArg"
-              @input="(event) => {subscriptionFormData.chosenArg = event.target.value;}"
+              @input="subscriptionFormData.chosenArg = $event.target.value"
               :invalid="$v.subscriptionFormData.chosenArg.$error"
               :disabled="subscriptionFormData.chosenEvent ? false : true"
             >
@@ -180,9 +180,7 @@
               required
               search
               :value="subscriptionFormData.chosenAction"
-              @input="(event) => {
-                subscriptionFormData.chosenAction = event.target.value;
-              }"
+              @input="subscriptionFormData.chosenAction = $event.target.value"
               :disabled="subscriptionFormData.chosenPanelWithActions ? false : true"
               :invalid="$v.subscriptionFormData.chosenAction.$dirty && $v.subscriptionFormData.chosenAction.$invalid"
             >

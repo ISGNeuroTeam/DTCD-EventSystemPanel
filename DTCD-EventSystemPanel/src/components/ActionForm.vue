@@ -63,7 +63,7 @@
           required
           size="big"
           :value="actionFormData.name"
-          @input="(e) => (actionFormData.name = e.target.value)"
+          @input="actionFormData.name = $event.target.value"
           :invalid="$v.actionFormData.name.$error"
         ></base-input>
 
@@ -73,7 +73,7 @@
             label="Имя параметра"
             size="big"
             :value="actionFormData.nameNewParam"
-            @input="(e) => (actionFormData.nameNewParam = e.target.value)"
+            @input="actionFormData.nameNewParam = $event.target.value"
             :invalid="$v.actionFormData.nameNewParam.$error"
           >
           </base-input>
@@ -110,7 +110,7 @@
         placeholder="Тело JS-функции"
         size="big"
         :value="actionFormData.body"
-        @input="(e) => (actionFormData.body = e.target.value)"
+        @input="actionFormData.body = $event.target.value"
         :invalid="$v.actionFormData.body.$error"
       ></base-textarea>
     </div>
@@ -135,7 +135,6 @@ export default {
   ],
   data() {
     return {
-      eventSystem: this.$root.eventSystem,
       actionFormData: {
         name: '',
         nameNewParam: '',
@@ -143,6 +142,9 @@ export default {
         body: '',
       },
     };
+  },
+  computed: {
+    eventSystem() { return this.$root.eventSystem; },
   },
   validations: {
     actionFormData: {
