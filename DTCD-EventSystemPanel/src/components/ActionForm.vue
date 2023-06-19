@@ -67,7 +67,7 @@
           size="big"
           :value="actionFormData.name"
           @input="(e) => (actionFormData.name = e.target.value)"
-          :invalid="$v.actionFormData.name.$dirty && $v.actionFormData.name.$invalid"
+          :invalid="$v.actionFormData.name.$error"
         ></base-input>
 
         <div class="AddParam">
@@ -114,7 +114,7 @@
         size="big"
         :value="actionFormData.body"
         @input="(e) => (actionFormData.body = e.target.value)"
-        :invalid="$v.actionFormData.body.$dirty && $v.actionFormData.body.$invalid"
+        :invalid="$v.actionFormData.body.$error"
       ></base-textarea>
     </div>
   </form>
