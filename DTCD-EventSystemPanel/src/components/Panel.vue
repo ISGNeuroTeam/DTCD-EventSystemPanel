@@ -4,17 +4,17 @@
       class="Wrapper"
       v-show="$root.typeVisibleWindow === 'Main'"
     >
-      <div 
-        class="Header" 
+      <div
+        class="Header"
         v-if="config.isTitleVisible"
       >
         <h4 class="mainTitle">
           Панель системы событий и действий
         </h4>
       </div>
-      
-      <base-tabs 
-        class="TabContainer" 
+
+      <base-tabs
+        class="TabContainer"
         @select="tabSelectHandler"
       >
         <div slot="tab" tab-name="Подписки"></div>
@@ -26,12 +26,13 @@
           <base-input
             type="search"
             class="SearchSubscribe"
+            @input="searchStringSubs = $event.target.value"
           >
             <span slot="icon-left" class="FontIcon name_searchSmall size_lg"></span>
           </base-input>
 
           <base-button
-            theme="theme_blueSec" 
+            theme="theme_blueSec"
             @click="toggleWindow('Subscription_Form')"
           > Создать
           </base-button>
@@ -43,12 +44,13 @@
           <base-input
             type="search"
             class="SearchSubscribe"
+            @input="searchStringActions = $event.target.value"
           >
             <span slot="icon-left" class="FontIcon name_searchSmall size_lg"></span>
           </base-input>
 
           <base-button
-            theme="theme_blueSec" 
+            theme="theme_blueSec"
             @click="toggleWindow('Action_Form')"
           > Создать
           </base-button>
@@ -62,7 +64,7 @@
               slot="item"
               theme="with_borderBottom"
               :key="index"
-              v-if="sub.subscriptionType !== 'system'"
+              v-if="toSearchSubscription(sub)"
             >
               <div slot="summary" class="ExpanderSummaryContent">
                 <div>
@@ -121,54 +123,56 @@
 
       <div class="PanelList" v-if="selectedTab === 1">
         <base-expander-group>
-          <base-expander
-            slot="item"
-            theme="with_borderBottom"
-            v-for="act in actions"
-            :key="act.id"
-          >
-            <div slot="summary" class="ExpanderSummaryContent">
-              <div>
-                <table class="Table theme_alfa">
-                  <tbody>
-                    <tr>
-                      <td class="Column type_first">Название:</td>
-                      <td class="Column type_second">{{act.name}}</td>
-                    </tr>
-                  </tbody>
-                </table>
+          <template v-for="(act, index) in actions">
+            <base-expander
+              slot="item"
+              theme="with_borderBottom"
+              :key="index"
+              v-if="toSearchAction(act)"
+            >
+              <div slot="summary" class="ExpanderSummaryContent">
+                <div>
+                  <table class="Table theme_alfa">
+                    <tbody>
+                      <tr>
+                        <td class="Column type_first">Название:</td>
+                        <td class="Column type_second">{{act.name}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <button
+                  v-if=" !act.guid"
+                  class="ExpanderIconBtn"
+                  type="button"
+                  @click="(event) => {
+                    eventSystem.removeCustomAction(act.name);
+                    // chosenAction = act;
+                    // toggleWindow('Action_Form');
+                  }"
+                >
+                  <span class="FontIcon name_trashFull size_md"></span>
+                </button>
+                <button
+                  v-if="!act.guid"
+                  class="ExpanderIconBtn"
+                  type="button"
+                  style="margin-left: 8px"
+                  @click="editCustomAction(act)"
+                >
+                  <span class="FontIcon name_edit size_md"></span>
+                </button>
               </div>
-              <button
-                v-if=" !act.guid"
-                class="ExpanderIconBtn"
-                type="button"
-                @click="(event) => {
-                  eventSystem.removeCustomAction(act.name);
-                  // chosenAction = act;
-                  // toggleWindow('Action_Form');
-                }"
-              >
-                <span class="FontIcon name_trashFull size_md"></span>
-              </button>
-              <button
-                v-if="!act.guid"
-                class="ExpanderIconBtn"
-                type="button"
-                style="margin-left: 8px"
-                @click="editCustomAction(act)"
-              >
-                <span class="FontIcon name_edit size_md"></span>
-              </button>
-            </div>
-            <table class="Table theme_alfa">
-              <tbody>
-                <tr v-if="act.guid">
-                  <td class="Column type_first">GUID:</td>
-                  <td class="Column type_second">{{act.guid ? act.guid : 'Пользовательское событие'}}</td>
-                </tr>
-              </tbody>
-            </table>
-          </base-expander>
+              <table class="Table theme_alfa">
+                <tbody>
+                  <tr v-if="act.guid">
+                    <td class="Column type_first">GUID:</td>
+                    <td class="Column type_second">{{act.guid ? act.guid : 'Пользовательское событие'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </base-expander>
+          </template>
         </base-expander-group>
       </div>
     </div>
@@ -208,7 +212,9 @@ export default {
       selectedTab: 0,
       config: {
         isTitleVisible: true,
-      },  
+      },
+      searchStringSubs: '',
+      searchStringActions: '',
     };
   },
   mounted() {
@@ -274,6 +280,32 @@ export default {
     editCustomAction(action) {
       this.chosenAction = action;
       this.toggleWindow('Action_Form');
+    },
+
+    toSearchSubscription(sub) {
+      const { subscriptionType = '', subscriptionName = '' } = sub;
+
+      if (subscriptionType === 'system') {
+        return false;
+      }
+
+      if (this.searchStringSubs.length > 0) {
+        const name = subscriptionName.toLowerCase();
+        const search = this.searchStringSubs.toLowerCase();
+        return name.includes(search);
+      }
+
+      return true;
+    },
+
+    toSearchAction(act) {
+      if (this.searchStringActions.length > 0) {
+        const name = act.name.toLowerCase();
+        const search = this.searchStringActions.toLowerCase();
+        return name.includes(search);
+      }
+
+      return true;
     },
   },
 };

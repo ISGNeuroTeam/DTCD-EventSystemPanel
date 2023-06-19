@@ -9,8 +9,8 @@
         }}
       </h4>
       <div class="BtnWrapper">
-        <base-tooltip 
-          content="Вернуться к подпискам" 
+        <base-tooltip
+          content="Вернуться к подпискам"
           placement="bottom"
         >
           <base-button
@@ -29,7 +29,7 @@
           Удалить действие
         </base-button>
 
-        <base-tooltip 
+        <base-tooltip
           content="Отменить"
           placement="bottom"
         >
@@ -41,8 +41,8 @@
           </base-icon-button>
         </base-tooltip>
 
-        <base-tooltip 
-          content="Сохранить" 
+        <base-tooltip
+          content="Сохранить"
           placement="bottom"
         >
           <base-icon-button
@@ -56,7 +56,7 @@
 
     <div class="Body">
       <div class="FieldContainer type_alfa">
-        <base-input 
+        <base-input
           label="Название показателя"
           class="Param type_full"
           required="true"
@@ -338,6 +338,11 @@ export default {
     handleSubmitBtnClick(event) {
       event.preventDefault();
       this.handleFormSubmit();
+    },
+
+    handleCancelBtnClick() {
+      this.resetForm();
+      this.$emit('closeSubscriptionForm');
     },
 
     handleFormSubmit(event) {
