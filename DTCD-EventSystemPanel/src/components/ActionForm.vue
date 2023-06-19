@@ -77,7 +77,7 @@
             size="big"
             :value="actionFormData.nameNewParam"
             @input="(e) => (actionFormData.nameNewParam = e.target.value)"
-            :invalid="$v.actionFormData.nameNewParam.$params.correctParamName"
+            :invalid="$v.actionFormData.nameNewParam.$error"
           >
           </base-input>
 
@@ -124,6 +124,12 @@
 import { validationMixin } from 'vuelidate';
 import { required } from '@vuelidate/validators/dist/raw.esm';
 
+import {
+  firstCharIsNotNumber,
+  notEqualToReserveWords,
+  hasntSpecialChars,
+} from '../validators/validators';
+
 export default {
   name: 'ActionForm',
   mixins: [validationMixin],
@@ -141,18 +147,17 @@ export default {
       },
     };
   },
-  validations() {
-    return {
-      actionFormData: {
-        name: { required },
-        body: { required },
-        nameNewParam: {
-          correctParamName: (value) => {
-            return false;
-          },
-        },
-      }
-    };
+  validations: {
+    actionFormData: {
+      name: { required },
+      body: { required },
+      nameNewParam: {
+        required,
+        firstCharIsNotNumber,
+        notEqualToReserveWords,
+        hasntSpecialChars,
+      },
+    }
   },
   mounted() {
     if (!this.currentAction) return;
@@ -179,7 +184,8 @@ export default {
 
     handleFormSubmit() {
       this.$root.logSystem.debug(`Submitted action form.`);
-      this.$v.$touch();
+      this.$v.actionFormData.name.$touch();
+      this.$v.actionFormData.body.$touch();
 
       if (!this.$v.$invalid) {
         this.saveCustomAction();
@@ -194,12 +200,19 @@ export default {
     },
 
     addNewParameter() {
-      if (this.actionFormData.nameNewParam) {
-        if (!Array.isArray(this.actionFormData.parameters)) {
-          this.actionFormData.parameters = [];
-        }
-        this.actionFormData.parameters.push(this.actionFormData.nameNewParam);
+      this.$v.actionFormData.nameNewParam.$touch();
+
+      if (!this.$v.actionFormData.nameNewParam.$invalid) {
+        const {
+          nameNewParam,
+          parameters,
+        } = this.actionFormData;
+
+        if (!Array.isArray(parameters)) parameters = [];
+        if (!parameters.includes(nameNewParam)) parameters.push(nameNewParam);
+
         this.actionFormData.nameNewParam = '';
+        this.$v.actionFormData.nameNewParam.$reset();
       }
     },
 
