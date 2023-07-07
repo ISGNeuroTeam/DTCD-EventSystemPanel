@@ -63,8 +63,8 @@
           required
           size="big"
           :value="actionFormData.name"
-          @input="(e) => (actionFormData.name = e.target.value)"
-          :invalid="$v.actionFormData.name.$dirty && $v.actionFormData.name.$invalid"
+          @input="actionFormData.name = $event.target.value"
+          :invalid="$v.actionFormData.name.$error"
         ></base-input>
 
         <div class="AddParam">
@@ -73,7 +73,8 @@
             label="Имя параметра"
             size="big"
             :value="actionFormData.nameNewParam"
-            @input="(e) => (actionFormData.nameNewParam = e.target.value)"
+            @input="actionFormData.nameNewParam = $event.target.value"
+            :invalid="$v.actionFormData.nameNewParam.$error"
           >
           </base-input>
 
@@ -109,8 +110,8 @@
         placeholder="Тело JS-функции"
         size="big"
         :value="actionFormData.body"
-        @input="(e) => (actionFormData.body = e.target.value)"
-        :invalid="$v.actionFormData.body.$dirty && $v.actionFormData.body.$invalid"
+        @input="actionFormData.body = $event.target.value"
+        :invalid="$v.actionFormData.body.$error"
       ></base-textarea>
     </div>
   </form>
@@ -120,6 +121,12 @@
 import { validationMixin } from 'vuelidate';
 import { required } from '@vuelidate/validators/dist/raw.esm';
 
+import {
+  firstCharIsNotNumber,
+  notEqualToReserveWords,
+  hasntSpecialChars,
+} from '../validators/validators';
+
 export default {
   name: 'ActionForm',
   mixins: [validationMixin],
@@ -128,7 +135,6 @@ export default {
   ],
   data() {
     return {
-      eventSystem: this.$root.eventSystem,
       actionFormData: {
         name: '',
         nameNewParam: '',
@@ -137,13 +143,20 @@ export default {
       },
     };
   },
-  validations() {
-    return {
-      actionFormData: {
-        name: { required },
-        body: { required },
-      }
-    };
+  computed: {
+    eventSystem() { return this.$root.eventSystem; },
+  },
+  validations: {
+    actionFormData: {
+      name: { required },
+      body: { required },
+      nameNewParam: {
+        required,
+        firstCharIsNotNumber,
+        notEqualToReserveWords,
+        hasntSpecialChars,
+      },
+    }
   },
   mounted() {
     if (!this.currentAction) return;
@@ -170,9 +183,10 @@ export default {
 
     handleFormSubmit() {
       this.$root.logSystem.debug(`Submitted action form.`);
-      this.$v.$touch();
+      this.$v.actionFormData.name.$touch();
+      this.$v.actionFormData.body.$touch();
 
-      if (!this.$v.$invalid) {
+      if (!this.$v.actionFormData.name.$invalid && !this.$v.actionFormData.body.$invalid) {
         this.saveCustomAction();
         this.handleCancelBtnClick();
       }
@@ -185,12 +199,19 @@ export default {
     },
 
     addNewParameter() {
-      if (this.actionFormData.nameNewParam) {
-        if (!Array.isArray(this.actionFormData.parameters)) {
-          this.actionFormData.parameters = [];
-        }
-        this.actionFormData.parameters.push(this.actionFormData.nameNewParam);
+      this.$v.actionFormData.nameNewParam.$touch();
+
+      if (!this.$v.actionFormData.nameNewParam.$invalid) {
+        const {
+          nameNewParam,
+          parameters,
+        } = this.actionFormData;
+
+        if (!Array.isArray(parameters)) parameters = [];
+        if (!parameters.includes(nameNewParam)) parameters.push(nameNewParam);
+
         this.actionFormData.nameNewParam = '';
+        this.$v.actionFormData.nameNewParam.$reset();
       }
     },
 

@@ -203,8 +203,6 @@ export default {
   },
   data() {
     return {
-      eventSystem: this.$root.eventSystem,
-      plugin: this.$root.pluginInstance,
       subscriptions: [],
       actions: [],
       chosenAction: null,
@@ -216,6 +214,10 @@ export default {
       searchStringSubs: '',
       searchStringActions: '',
     };
+  },
+  computed: {
+    eventSystem() { return this.$root.eventSystem; },
+    plugin() { return this.$root.pluginInstance; },
   },
   mounted() {
     this.subscriptions = this.eventSystem.subscriptions;

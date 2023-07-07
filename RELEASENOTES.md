@@ -1,3 +1,8 @@
+## [0.7.0] - 2023-07-06
+
+### Added
+- Validations for custom action params
+
 # [0.6.0] - 2023-05-22
 
 ### Added

@@ -61,9 +61,9 @@
           class="Param type_full"
           required="true"
           size="big"
-          @input="(event) => subscriptionFormData.subscriptionName = event.target.value"
+          @input="subscriptionFormData.subscriptionName = $event.target.value"
           :value="subscriptionFormData.subscriptionName"
-          :invalid="$v.subscriptionFormData.subscriptionName.$dirty && $v.subscriptionFormData.subscriptionName.$invalid"
+          :invalid="$v.subscriptionFormData.subscriptionName.$error"
         ></base-input>
       </div>
 
@@ -82,7 +82,7 @@
                 subscriptionFormData.chosenPanel = event.target.value;
                 subscriptionFormData.chosenEvent = '';
               }"
-              :invalid="$v.subscriptionFormData.chosenPanel.$dirty && $v.subscriptionFormData.chosenPanel.$invalid"
+              :invalid="$v.subscriptionFormData.chosenPanel.$error"
             >
               <span slot="label">Плагин</span>
               <div
@@ -106,7 +106,7 @@
                 subscriptionFormData.chosenEvent = event.target.value;
                 subscriptionFormData.chosenArg = '';
               }"
-              :invalid="$v.subscriptionFormData.chosenEvent.$dirty && $v.subscriptionFormData.chosenEvent.$invalid"
+              :invalid="$v.subscriptionFormData.chosenEvent.$error"
               :disabled="subscriptionFormData.chosenPanel ? false : true"
             >
               <span slot="label">Событие плагина</span>
@@ -130,8 +130,8 @@
               required
               search
               :value="subscriptionFormData.chosenArg"
-              @input="(event) => {subscriptionFormData.chosenArg = event.target.value;}"
-              :invalid="$v.subscriptionFormData.chosenArg.$dirty && $v.subscriptionFormData.chosenArg.$invalid"
+              @input="subscriptionFormData.chosenArg = $event.target.value"
+              :invalid="$v.subscriptionFormData.chosenArg.$error"
               :disabled="subscriptionFormData.chosenEvent ? false : true"
             >
               <span slot="label">Аргумент события плагина</span>
@@ -160,7 +160,7 @@
                 subscriptionFormData.chosenPanelWithActions = event.target.value;
                 subscriptionFormData.chosenAction = '';
               }"
-              :invalid="$v.subscriptionFormData.chosenPanelWithActions.$dirty && $v.subscriptionFormData.chosenPanelWithActions.$invalid"
+              :invalid="$v.subscriptionFormData.chosenPanelWithActions.$error"
             >
               <span slot="label">Плагин</span>
               <div
@@ -180,9 +180,7 @@
               required
               search
               :value="subscriptionFormData.chosenAction"
-              @input="(event) => {
-                subscriptionFormData.chosenAction = event.target.value;
-              }"
+              @input="subscriptionFormData.chosenAction = $event.target.value"
               :disabled="subscriptionFormData.chosenPanelWithActions ? false : true"
               :invalid="$v.subscriptionFormData.chosenAction.$dirty && $v.subscriptionFormData.chosenAction.$invalid"
             >
