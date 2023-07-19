@@ -3,6 +3,7 @@ import {
   EventSystemAdapter,
   StyleSystemAdapter,
   LogSystemAdapter,
+  NotificationSystemAdapter,
 } from '../../DTCD-SDK/index';
 
 import { version } from './../package.json';
@@ -35,20 +36,19 @@ export class EventSystemPanel extends PanelPlugin {
     this.#eventSystem = new EventSystemAdapter('0.4.0', guid);
     this.#styleSystem = new StyleSystemAdapter('0.4.0');
     const logSystem = new LogSystemAdapter('0.7.0', guid, EventSystemPanel.getRegistrationMeta().name);
-
+    const notificationSystem = new NotificationSystemAdapter('0.1.1');
     const { default: VueJS } = this.getDependence('Vue');
     const view = new VueJS({
       data: () => {
         return {
+          guid,
+          logSystem,
+          notificationSystem,
           eventSystem: this.#eventSystem,
           styleSystem: this.#styleSystem,
-          logSystem,
           pluginInstance: this,
-          guid,
-
           typeVisibleWindow: 'Main',
           indexActiveTab: 0,
-
           actionFormData: {
             name: '',
             nameNewParam: '',

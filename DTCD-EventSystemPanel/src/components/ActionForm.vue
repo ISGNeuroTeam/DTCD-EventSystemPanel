@@ -127,6 +127,8 @@ import {
   hasntSpecialChars,
 } from '../validators/validators';
 
+const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+
 export default {
   name: 'ActionForm',
   mixins: [validationMixin],
@@ -187,8 +189,17 @@ export default {
       this.$v.actionFormData.body.$touch();
 
       if (!this.$v.actionFormData.name.$invalid && !this.$v.actionFormData.body.$invalid) {
-        this.saveCustomAction();
-        this.handleCancelBtnClick();
+        try {
+          this.saveCustomAction();
+          this.handleCancelBtnClick();
+        } catch (error) {
+          this.$root.notificationSystem.create(
+            'Не удалось сохранить действие',
+            `Ошибка: ${error.message}`,
+            { floatMode: true, floatTime: 5, type: 'warning' },
+          );
+          throw error;
+        }
       }
     },
 
@@ -221,19 +232,15 @@ export default {
 
     saveCustomAction() {
       const { name, parameters, body } = this.actionFormData;
-
-      const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+      /** AsyncFunction defined above */
       const callback = new AsyncFunction(...parameters, body);
 
       if (this.currentAction) {
-        this.currentAction.callback = callback;
-        this.$root.logSystem.info(`Updated "${name}" custom action.`);
-      } else {
-        this.eventSystem.registerCustomAction(name, callback);
-        this.$root.logSystem.info(`Registered "${name}" custom action.`);
+        return this.eventSystem.editCustomAction(this.currentAction, callback);
       }
 
-    },
+      this.eventSystem.registerCustomAction(name, callback);
+  },
 
     resetForm() {
       this.$root.actionFormData = {
