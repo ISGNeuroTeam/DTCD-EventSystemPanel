@@ -63,8 +63,9 @@
           required
           size="big"
           :value="actionFormData.name"
-          @input="actionFormData.name = $event.target.value"
+          :disabled="currentAction"
           :invalid="$v.actionFormData.name.$error"
+          @input="actionFormData.name = $event.target.value"
         ></base-input>
 
         <div class="AddParam">
@@ -73,8 +74,8 @@
             label="Имя параметра"
             size="big"
             :value="actionFormData.nameNewParam"
-            @input="actionFormData.nameNewParam = $event.target.value"
             :invalid="$v.actionFormData.nameNewParam.$error"
+            @input="actionFormData.nameNewParam = $event.target.value"
           >
           </base-input>
 
@@ -95,13 +96,13 @@
 
       <div class="ActionParams">
         <base-chip
-          class="ParamsWrapper"
-          close="remove"
           v-for="(param, index) in actionFormData.parameters"
-          @remove="removeParameter(index)"
           :key="index"
-          >{{ param }}</base-chip
-        >
+          close="remove"
+          class="ParamsWrapper"
+          @remove="removeParameter(index)"
+          v-text="param"
+        />
       </div>
 
       <base-textarea
@@ -110,8 +111,8 @@
         placeholder="Тело JS-функции"
         size="big"
         :value="actionFormData.body"
-        @input="actionFormData.body = $event.target.value"
         :invalid="$v.actionFormData.body.$error"
+        @input="actionFormData.body = $event.target.value"
       ></base-textarea>
     </div>
   </form>
