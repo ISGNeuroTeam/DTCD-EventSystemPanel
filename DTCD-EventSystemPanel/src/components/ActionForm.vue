@@ -105,16 +105,6 @@
         />
       </div>
 
-      <!-- <base-textarea
-        label="Функция"
-        required
-        placeholder="Тело JS-функции"
-        size="big"
-        :value="actionFormData.body"
-        :invalid="$v.actionFormData.body.$error"
-        @input="actionFormData.body = $event.target.value"
-      ></base-textarea> -->
-
       <base-code-editor
         label="Функция"
         required
@@ -124,7 +114,17 @@
         @change="actionFormData.body = $event.target.value"
         rows="4"
         data-autoheight
-      ></base-code-editor>
+      >
+        <base-textarea
+          label="Функция"
+          required
+          placeholder="Тело JS-функции"
+          size="big"
+          :value="actionFormData.body"
+          :invalid="$v.actionFormData.body.$error"
+          @input="actionFormData.body = $event.target.value"
+        ></base-textarea>
+      </base-code-editor>
     </div>
   </form>
 </template>
